@@ -142,13 +142,13 @@ const Recommendation = ({ value }: RecommendationProps) => {
   const ScrollLeft = (flag: Boolean) => {
     const { offsetWidth, clientWidth } = ResourceListScrollDom.current!
     if (flag) {
-      ResourceListScrollDom.current!.scrollTo({
-        left: Math.floor((ResourceListScrollDom.current!.scrollLeft / (160 + 20)) - Math.floor(clientWidth / (160 + 20))) * (160 + 20),
+      (ResourceListScrollDom.current as any).scrollTo({
+        left: Math.floor(((ResourceListScrollDom.current as any).scrollLeft  / (160 + 20)) - Math.floor(clientWidth / (160 + 20))) * (160 + 20),
         behavior: 'smooth'
       })
     } else {
-      ResourceListScrollDom.current!.scrollTo({
-        left: Math.floor((ResourceListScrollDom.current!.scrollLeft / (160 + 20)) + Math.floor(clientWidth / (160 + 20))) * (160 + 20),
+      (ResourceListScrollDom.current as any).scrollTo({
+        left: Math.floor(((ResourceListScrollDom.current as any).scrollLeft / (160 + 20)) + Math.floor(clientWidth / (160 + 20))) * (160 + 20),
         behavior: 'smooth'
       })
     }
@@ -161,19 +161,19 @@ const Recommendation = ({ value }: RecommendationProps) => {
 // console.log(clientWidth1,offsetWidth1)
     const { offsetWidth, clientWidth } = ResourceListScrollDom.current!
     // console.log(clientWidth,offsetWidth)
-    setshowLeft(clientWidth + ResourceListScrollDom.current!.scrollLeft < clientWidth1)
-    setshowRight(ResourceListScrollDom.current!.scrollLeft > 0)
+    setshowLeft(clientWidth + (ResourceListScrollDom.current as any).scrollLeft < clientWidth1)
+    setshowRight((ResourceListScrollDom.current as any).scrollLeft > 0)
   }
   useLayoutEffect(() => {
-    showButtons()
-    ResourceListScrollDom.current!.addEventListener('scroll', showButtons)
+    showButtons();
+    (ResourceListScrollDom.current as any).addEventListener('scroll', showButtons)
 
 
   }, [])
   return (
     <Wrapper>
       {showLeft ? (<LeftButton className='left-button' onClick={() => ScrollLeft(false)}>
-        <svg t='1633267102894' className='icon' viewBox='0 0 1024 1024' version='1.1'
+        <svg  className='icon' viewBox='0 0 1024 1024' version='1.1'
              xmlns='http://www.w3.org/2000/svg' p-id='2488' width='24' height='24'>
           <path
             d='M318.57 223.95l322.99 322.99c21.87 21.87 57.33 21.87 79.2 0 21.87-21.87 21.87-57.33 0-79.2l-323-322.99c-21.87-21.87-57.33-21.87-79.2 0-21.86 21.87-21.86 57.33 0.01 79.2z'
@@ -184,7 +184,7 @@ const Recommendation = ({ value }: RecommendationProps) => {
         </svg>
       </LeftButton>) : null}
       {showRight ? (<RightButton className='right-button' onClick={() => ScrollLeft(true)}>
-        <svg t='1633267102894' transform='rotate(180)' className='icon' viewBox='0 0 1024 1024' version='1.1'
+        <svg  transform='rotate(180)' className='icon' viewBox='0 0 1024 1024' version='1.1'
              xmlns='http://www.w3.org/2000/svg' p-id='2488' width='24' height='24'>
           <path
             d='M318.57 223.95l322.99 322.99c21.87 21.87 57.33 21.87 79.2 0 21.87-21.87 21.87-57.33 0-79.2l-323-322.99c-21.87-21.87-57.33-21.87-79.2 0-21.86 21.87-21.86 57.33 0.01 79.2z'
