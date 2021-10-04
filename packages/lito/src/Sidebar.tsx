@@ -63,7 +63,7 @@ align-items: center;
   
 
 `
-import partypopper from '../public/asserts/party-popper.png'
+import partypopper from '/asserts/party-popper.png'
 const Sidebar = () => {
   const { t } = useTranslation()
   return (

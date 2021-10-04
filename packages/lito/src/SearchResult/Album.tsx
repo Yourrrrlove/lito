@@ -1,16 +1,17 @@
 import { useCallback } from 'react'
 import { Overlay, PlayButton, ResourceWrapper, SubTitle, Title } from '../ListenNow/Recommendation'
+import { useHistory } from 'react-router'
 
 export const AlbumResource = ({value}:any) => {
 
-  const { attributes } = value
+  const { attributes,id } = value
 
 
   // console.log(value)
   if (!attributes) {
     throw new Error(`attributes not found in resource: ${JSON.stringify(value)}`)
   }
-  const { artwork, url,  name ,artistName} = attributes
+  const { artwork, url,  name ,artistName,} = attributes
   // TODO: some resource's artwork is optional, fallback to render the title?
   if (!artwork) {
     throw new Error(`artwork not found in resource: ${JSON.stringify(value)}`)
@@ -24,8 +25,13 @@ export const AlbumResource = ({value}:any) => {
     await music.setQueue({ url })
     await music.play()
   }, [])
+  const { push } = useHistory()
+  const handleClick = useCallback(() => {
+    push(`/album/${id}`)
+  }, [push,id])
   return (
-    <ResourceWrapper
+
+    <ResourceWrapper onClick={handleClick}
       style={
   {
     '--background-color': `#${artwork.bgColor}`,

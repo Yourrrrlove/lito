@@ -16,6 +16,7 @@ import Sidebar from './Sidebar'
 import { lightTheme } from './themes'
 import useAuthorized from './useAuthorized'
 import SearchResult from './SearchResult'
+import { AlbumDetail } from './AlbumDetail'
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -49,10 +50,12 @@ const Main = styled.div`
 `
 
 const fetcher = async (url: string) => {
+  const t=await MusicKit.getInstance().api.music(url)
+  console.log(t)
+
   const {
     data: { data },
-  } = await MusicKit.getInstance().api.music(url)
-  console.log(data)
+  } = t
   return data
 }
 
@@ -80,6 +83,8 @@ const App = () => {
                         <Player />
                         <Route path="/" component={ListenNow} exact/>
                         <Route path="/search/:text" component={SearchResult} />
+                        <Route path="/album/:id" component={AlbumDetail} />
+
                         <Route path="/search" component={SearchResult} exact />
 
                       </>

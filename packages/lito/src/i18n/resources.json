@@ -12,6 +12,7 @@
       "connectToAppleMusic": "连接到 Apple Music",
       "listenNow": "现在就听",
       "nothing": "没有数据",
+      "loading": "正在加载",
       "fetchFailed": "加载失败",
       "searchResult": "搜索结果",
       "albums": "专辑",
