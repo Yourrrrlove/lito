@@ -12,7 +12,13 @@
       "connectToAppleMusic": "连接到 Apple Music",
       "listenNow": "现在就听",
       "nothing": "没有数据",
-      "fetchFailed": "加载失败"
+      "fetchFailed": "加载失败",
+      "searchResult": "搜索结果",
+      "albums": "专辑",
+      "songs":"歌曲",
+      "playlists": "播放列表",
+      "artists": "歌手"
+
     }
   }
 }

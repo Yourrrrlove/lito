@@ -15,7 +15,7 @@ import Player from './Player'
 import Sidebar from './Sidebar'
 import { lightTheme } from './themes'
 import useAuthorized from './useAuthorized'
-
+import SearchResult from './SearchResult'
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -52,6 +52,7 @@ const fetcher = async (url: string) => {
   const {
     data: { data },
   } = await MusicKit.getInstance().api.music(url)
+  console.log(data)
   return data
 }
 
@@ -77,7 +78,10 @@ const App = () => {
                     {authorized ? (
                       <>
                         <Player />
-                        <Route path="/" component={ListenNow} />
+                        <Route path="/" component={ListenNow} exact/>
+                        <Route path="/search/:text" component={SearchResult} />
+                        <Route path="/search" component={SearchResult} exact />
+
                       </>
                     ) : (
                       <Authorize />

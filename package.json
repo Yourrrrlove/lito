@@ -8,5 +8,8 @@
     "build:web": "cd packages/lito && npm run build",
     "build:windows": "npm run build:web && cd windows && cargo build --target x86_64-pc-windows-msvc --release",
     "build:darwin": "npm run build:web && make -C darwin"
+  },
+  "dependencies": {
+    "@react-hook/resize-observer": "^1.2.4"
   }
 }

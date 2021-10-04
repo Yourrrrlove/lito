@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import logo from './logo.svg'
 import NavButton from './NavButton'
 import { isMacOS } from './utils'
+import SearchBar from './SearchBar'
 
 const Wrapper = styled.div`
   display: flex;
@@ -59,6 +60,9 @@ const Sidebar = () => {
     <Wrapper>
       <Logo />
       <ul>
+        <li>
+          <SearchBar/>
+        </li>
         <li>
           <NavButton to="/">{t('listenNow')}</NavButton>
         </li>

@@ -1,28 +1,85 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="preconnect" href="https://amp-api.music.apple.com/" crossorigin />
-    <link rel="preconnect" href="https://api.music.apple.com/" crossorigin />
-    <link rel="preconnect" href="https://is1-ssl.mzstatic.com/" crossorigin />
-    <link rel="preconnect" href="https://is2-ssl.mzstatic.com/" crossorigin />
-    <link rel="preconnect" href="https://is3-ssl.mzstatic.com/" crossorigin />
-    <link rel="preconnect" href="https://is4-ssl.mzstatic.com/" crossorigin />
-    <link rel="preconnect" href="https://is5-ssl.mzstatic.com/" crossorigin />
-    <link rel="preconnect" href="https://play.itunes.apple.com/" crossorigin />
-    <link rel="preconnect" href="https://aod-ssl.itunes.apple.com/" crossorigin />
-    <meta charset="utf-8" />
-    <title>Lito</title>
-    <meta http-equiv="cache-control" content="no-cache" />
-    <script src="./musickit.js" data-web-components></script>
-    <style>
-        ::-webkit-scrollbar {
-            display: none; /* Chrome Safari */
-        }
-    </style>
+<head>
+  <link rel='preconnect' href='https://amp-api.music.apple.com/' crossorigin />
+  <link rel='preconnect' href='https://api.music.apple.com/' crossorigin />
+  <link rel='preconnect' href='https://is1-ssl.mzstatic.com/' crossorigin />
+  <link rel='preconnect' href='https://is2-ssl.mzstatic.com/' crossorigin />
+  <link rel='preconnect' href='https://is3-ssl.mzstatic.com/' crossorigin />
+  <link rel='preconnect' href='https://is4-ssl.mzstatic.com/' crossorigin />
+  <link rel='preconnect' href='https://is5-ssl.mzstatic.com/' crossorigin />
+  <link rel='preconnect' href='https://play.itunes.apple.com/' crossorigin />
+  <link rel='preconnect' href='https://aod-ssl.itunes.apple.com/' crossorigin />
+  <meta charset='utf-8' />
+  <title>Lito</title>
+  <meta http-equiv='cache-control' content='no-cache' />
+  <script src='./musickit.js' data-web-components></script>
+  <style>
+      ::-webkit-scrollbar {
+          display: none; /* Chrome Safari */
+      }
 
-      </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/index.tsx"></script>
-  </body>
+      .shelf-grid__list {
+          --grid-rows: 5;
+          --grid-column-gap: 20px;
+          grid-auto-columns: 270px;
+          grid-template-rows: repeat(var(--grid-rows), -webkit-max-content);
+          grid-template-rows: repeat(var(--grid-rows), max-content);
+
+      grid-column-gap:10px;
+
+
+      }
+      .shelf-grid__list li ::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 1;
+          border-bottom: .5px solid rgba(0, 0, 0, 0.05)
+      }
+
+      @media only screen and (min-width: 1000px) {
+          .shelf-grid__list {
+              grid-auto-columns: calc((100% - 1 * var(--grid-column-gap)) / 3);
+              grid-template-rows: repeat(var(--grid-rows), -webkit-max-content);
+              grid-template-rows: repeat(var(--grid-rows), max-content);
+              grid-column-gap: var(--grid-column-gap)
+          }
+      }
+
+      @media only screen and (min-width: 1260px) {
+          .shelf-grid__list {
+              grid-auto-columns: calc((100% - 2 * var(--grid-column-gap)) / 4);
+              grid-template-rows: repeat(var(--grid-rows), -webkit-max-content);
+              grid-template-rows: repeat(var(--grid-rows), max-content);
+              grid-column-gap: var(--grid-column-gap)
+          }
+      }
+
+      @media only screen and (min-width: 1580px) {
+          .shelf-grid__list {
+              grid-auto-columns: calc((100% - 3 * var(--grid-column-gap)) / 5);
+              grid-template-rows: repeat(var(--grid-rows), -webkit-max-content);
+              grid-template-rows: repeat(var(--grid-rows), max-content);
+              grid-column-gap: var(--grid-column-gap)
+          }
+      }
+
+      @media only screen and (min-width: 1940px) {
+          .shelf-grid__list {
+              grid-auto-columns: calc((100% - 3 * var(--grid-column-gap)) / 5);
+              grid-template-rows: repeat(var(--grid-rows), -webkit-max-content);
+              grid-template-rows: repeat(var(--grid-rows), max-content);
+              grid-column-gap: var(--grid-column-gap)
+          }
+      }
+  </style>
+
+</head>
+<body>
+<div id='root'></div>
+<script type='module' src='/src/index.tsx'></script>
+</body>
 </html>

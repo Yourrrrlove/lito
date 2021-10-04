@@ -1,6 +1,7 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import SimpleErrorBoundary from '../SimpleErrorBoundary'
+import useResizeObserver from '@react-hook/resize-observer'
 
 export interface RecommendationProps {
   value: PersonalRecommendation
@@ -92,7 +93,7 @@ const ResourceList = styled.div`
   scroll-behavior: smooth;
 
 `
-const LeftButton = styled.div`
+export const LeftButton = styled.div`
   margin-top: 48px;
   width: 36px;
   height: 160px;
@@ -112,7 +113,7 @@ const LeftButton = styled.div`
 
   }
 `
-const RightButton = styled.div`
+export const RightButton = styled.div`
   margin-top: 48px;
   width: 36px;
   height: 160px;
@@ -162,14 +163,17 @@ const Recommendation = ({ value }: RecommendationProps) => {
     const { offsetWidth, clientWidth } = ResourceListScrollDom.current!
     // console.log(clientWidth,offsetWidth)
     setshowLeft(clientWidth + (ResourceListScrollDom.current as any).scrollLeft < clientWidth1)
-    setshowRight((ResourceListScrollDom.current as any).scrollLeft > 0)
+    setshowRight((ResourceListScrollDom.current as any).scrollLeft > 20)
   }
   useLayoutEffect(() => {
     showButtons();
     (ResourceListScrollDom.current as any).addEventListener('scroll', showButtons)
+    // (ResourceListScrollDom.current as any).addEventListener('resize', showButtons)
 
 
   }, [])
+  useResizeObserver(ResourceListScrollDom,showButtons)
+
   return (
     <Wrapper>
       {showLeft ? (<LeftButton className='left-button' onClick={() => ScrollLeft(false)}>
@@ -215,7 +219,8 @@ interface ResourceProps {
   value: any
 }
 
-const ResourceWrapper = styled.div`
+export const ResourceWrapper = styled.div`
+  scroll-snap-align: start;
   position: relative;
   background-color: var(--background-color);
   width: 160px;
@@ -237,9 +242,9 @@ const ResourceWrapper = styled.div`
 
   }
 
-  //overflow: hidden;
+  overflow: hidden;
 `
-const Title = styled.span`
+export const Title = styled.span`
   top: 20px;
   position: absolute;
   left: 0;
@@ -248,7 +253,7 @@ const Title = styled.span`
   font-weight: bold;
   //z-index: 10;
 `
-const SubTitle = styled.span`
+export const SubTitle = styled.span`
   bottom: 10px;
   position: absolute;
   left: 20px;
@@ -259,7 +264,7 @@ const SubTitle = styled.span`
   white-space: pre-wrap;
   //z-index: 10;
 `
-const Overlay = styled.div`
+export const Overlay = styled.div`
   position: absolute;
   left: 0;
   top: 0;
@@ -279,7 +284,7 @@ const Overlay = styled.div`
   }
 `
 
-const PlayButton = styled.button`
+export const PlayButton = styled.button`
   position: absolute;
   left: 50%;
   top: 50%;
