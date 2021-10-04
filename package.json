@@ -10,6 +10,5 @@
     "build:darwin": "npm run build:web && make -C darwin"
   },
   "dependencies": {
-    "@react-hook/resize-observer": "^1.2.4"
   }
 }
