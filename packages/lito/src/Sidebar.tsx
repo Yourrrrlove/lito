@@ -35,7 +35,7 @@ const Wrapper = styled.div`
     padding: 0 12px;
     color: inherit;
     font: inherit;
-    line-height: 28px;
+    line-height: 32px;
     text-decoration: none;
     border-radius: 5px;
     &.active {
@@ -53,7 +53,17 @@ const Logo = styled.div`
   color: #000;
   opacity: ${isMacOS() ? 0 : 1};
 `
+const FlexDiv=styled.div`
+display: flex;
+align-items: center;
+  font-weight: 600;
+  img{
+    margin-right: 10px;
+  }
+  
 
+`
+import partypopper from '../public/asserts/party-popper.png'
 const Sidebar = () => {
   const { t } = useTranslation()
   return (
@@ -64,7 +74,9 @@ const Sidebar = () => {
           <SearchBar/>
         </li>
         <li>
-          <NavButton to="/">{t('listenNow')}</NavButton>
+          <NavButton to="/">
+            <FlexDiv><img src={partypopper} width={'22px'} height={'22px'}/>{t('listenNow')}</FlexDiv>
+            </NavButton>
         </li>
       </ul>
     </Wrapper>

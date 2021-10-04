@@ -9,8 +9,9 @@ export interface NavButtonProps {
 
 const Button = styled.button`
   width: 100%;
+  height: 32px;
   padding: 0 12px;
-  line-height: 28px;
+  line-height: 32px;
   border-radius: 5px;
   text-align: left;
   background-color: transparent;
@@ -25,7 +26,11 @@ const NavButton = ({ to, children }: NavButtonProps) => {
   const handleClick = useCallback(() => {
     push(to)
   }, [push, to])
-  const active = useMemo(() => matchPath(pathname, { path: to }), [pathname, to])
+  const active = useMemo(() =>{
+    if(to=='/') {
+      return pathname==to
+    }
+   return  matchPath(pathname, { path: to })} , [pathname, to])
   return (
     <Button className={[active ? 'active' : ''].join(' ')} type="button" children={children} onClick={handleClick} />
   )
