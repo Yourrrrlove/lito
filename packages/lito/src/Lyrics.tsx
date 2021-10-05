@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   bottom: 0;
   background-size: cover;
   background-color: #000;
-  z-index: 10;
+  z-index: 99;
   transition: opacity 0.5s ease;
   opacity: 0;
   pointer-events: none;

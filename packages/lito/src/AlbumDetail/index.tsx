@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { useCallback } from 'react'
 import Nothing from '../Nothing'
+import Player from '../Player'
 
 const Wrapper = styled.div`
   padding-bottom: 32px;
@@ -30,9 +31,25 @@ display: flex;
     max-height: 280px;
     overflow-y: hidden;
   }
-
-
+  
 `
+const ImgWrapper=styled.div`
+position: relative;
+overflow: visible;
+  z-index: 2;
+  height: 300px;
+  width: 300px;
+  display: block;
+.shadow{
+  position: absolute;
+  top: 12px;
+  left: 0;
+  opacity: 0.4;
+  filter: blur(4px);
+  z-index: -1;
+}
+`
+
 const TrackList=styled.div`
 display: flex;
   flex-direction: column;
@@ -46,12 +63,30 @@ const Title = styled.span`
   font-size: 2em;
   font-weight: 700;
 `
+const ControlWrapper=styled.div`
+  margin-top: auto;
+  margin-bottom: 10px;
+  display: flex;
+  font-weight: 600;
+  
+`
+const PlayButton=styled.div`
+  border-radius: 6px;
+  height: 20px;
+  display: flex;
+  padding: 10px 20px;
+  color: aliceblue;
+  background-color: #f86676;
+  align-items: center;
+  justify-content: center;
+`
 const SubTitle = styled.span`
   font-weight: 700;
   font-size: 1.8em;
 
   color:  #fa2138 ;
 `
+
 const SubSubTitle = styled.span`
   font-weight: lighter;
   font-size: 1.2em;
@@ -59,7 +94,7 @@ const SubSubTitle = styled.span`
 `
 export const AlbumDetail=()=>{
 
-  const { t } = useTranslation()
+  // const { t } = useTranslation()
   let id= (useParams() as any)['id']
   console.log(id)
   const { data: infos, error } = useSWR(
@@ -84,11 +119,19 @@ export const AlbumDetail=()=>{
   }
   const { artwork, url,  name ,artistName,genreNames,editorialNotes} = attributes
   const artworkUrl = artwork.url.replace('{w}', '400').replace('{h}', '400').replace('{c}', 'cc').replace('{f}', 'webp')
-
+  const playA = useCallback(async () => {
+    const music = MusicKit.getInstance()
+    await music.setQueue({ url })
+    await music.play()
+  }, [])
   return (
     <Wrapper>
       <HeadWrapper>
-        <img src={artworkUrl} loading='lazy' width='100%' height='100%' alt=''/>
+<ImgWrapper>
+  <img src={artworkUrl} loading='lazy' width='100%' height='100%' alt=''/>
+  <img src={artworkUrl} className={'shadow'} loading='lazy' width='100%' height='100%' alt=''/>
+
+</ImgWrapper>
         <DetailsWrapper>
           <Title>
             {name}
@@ -102,6 +145,13 @@ export const AlbumDetail=()=>{
           <p>
             {editorialNotes?.short}
           </p>
+          <ControlWrapper>
+            <PlayButton onClick={playA}>
+              <PlayIcon/>
+              播放
+
+            </PlayButton>
+          </ControlWrapper>
         </DetailsWrapper>
 
       </HeadWrapper>
