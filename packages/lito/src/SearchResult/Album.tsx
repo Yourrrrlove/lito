@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { Overlay, PlayButton, ResourceWrapper, SubTitle, Title } from '../ListenNow/Recommendation'
 import { useHistory } from 'react-router'
 
-export const AlbumResource = ({value}:any) => {
+export const AlbumResource = ({value,noHover}:any) => {
 
   const { attributes,id } = value
 
@@ -38,11 +38,14 @@ export const AlbumResource = ({value}:any) => {
   } as React.CSSProperties
 }
 >
+
   <img src={artworkUrl} loading='lazy' width='100%' height='100%' alt='' />
-    <Overlay >
-      <Title>
+      <img src={artworkUrl} className={'shadow'} loading='lazy' width='100%' height='100%' alt='' />
+
+      <Overlay >
+      {noHover?null:(<Title>
         {artistName}
-      </Title>
+      </Title>)}
       <PlayButton type='button' onClick={play}>
         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 27'>
           <path
@@ -50,9 +53,9 @@ export const AlbumResource = ({value}:any) => {
         </svg>
       </PlayButton>
 
-      <SubTitle>
+      {noHover?null:(<SubTitle>
         {name}
-    </SubTitle>
+    </SubTitle>)}
 
     </Overlay>
 

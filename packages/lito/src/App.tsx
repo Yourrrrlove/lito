@@ -17,6 +17,8 @@ import { lightTheme } from './themes'
 import useAuthorized from './useAuthorized'
 import SearchResult from './SearchResult'
 import { AlbumDetail } from './AlbumDetail'
+import { ArtistDetail } from './ArtistDetail'
+import { PlayListDetail } from './PlayListDetail'
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -84,6 +86,8 @@ const App = () => {
                         <Route path="/" component={ListenNow} exact/>
                         <Route path="/search/:text" component={SearchResult} />
                         <Route path="/album/:id" component={AlbumDetail} />
+                        <Route path="/artist/:id" component={ArtistDetail} />
+                        <Route path="/playlist/:id" component={PlayListDetail} />
 
                         <Route path="/search" component={SearchResult} exact />
 

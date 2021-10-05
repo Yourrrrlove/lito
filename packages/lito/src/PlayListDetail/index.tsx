@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom'
 import { useCallback } from 'react'
 import Nothing from '../Nothing'
 import Player from '../Player'
+import { Overlay } from '../ListenNow/Recommendation'
+import { ArtistResource } from '../SearchResult/Artist'
 import { useHistory } from 'react-router'
 
 const Wrapper = styled.div`
@@ -84,7 +86,7 @@ const PlayButton=styled.div`
 const SubTitle = styled.span`
   font-weight: 700;
   font-size: 1.8em;
-  margin-right: 10px;
+
   color:  #fa2138 ;
 `
 
@@ -93,23 +95,20 @@ const SubSubTitle = styled.span`
   font-size: 1.2em;
   opacity: 0.8;
 `
-const ArtistJump=({artist}:any)=>{
-  const { push } = useHistory()
-  const ToArtist= useCallback(() => {
-      push(`/artist/${artist['id']}`)
-    }, [push,artist])
-  return(
-    <SubTitle onClick={ToArtist}>
-      {artist.attributes.name}
-    </SubTitle>
-  )
+const ArtistsGrid=styled.div`
+display: flex;
+  width: 100%;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  &>div{
+    margin-right: 20px;
+    margin-top: 20px;
 
-
-}
-export const AlbumDetail=()=>{
+  }
+`
+export const PlayListDetail=()=>{
 
   // const { t } = useTranslation()
-
   let id= (useParams() as any)['id']
   console.log(id)
   const playA = useCallback(async () => {
@@ -117,24 +116,21 @@ export const AlbumDetail=()=>{
     await music.setQueue({ url })
     await music.play()
   }, [])
-
   const { data: infos, error } = useSWR(
     () => {
       const qs = new URLSearchParams()
       qs.set('l', 'zh-cn')
       qs.set('platform', 'web')
-      qs.set('include', 'tracks,artists')
-
-      qs.set('fields[artists]', 'name,url')
-
+      qs.set('views', 'featured-artists')
       qs.set('extend', 'artistUrl,')
-
-      return `v1/catalog/cn/albums/${id}?${qs.toString()}`
+      qs.set('include', 'tracks')
+      qs.set('include[songs]', 'artists')
+      qs.set('fields[artists]', 'name,url,artwork')
+      return `v1/catalog/cn/playlists/${id}?${qs.toString()}`
     },
   )
   console.log(error)
   console.log(infos)
-
 
   const Info=infos?.[0]
   if(!Info){
@@ -142,13 +138,12 @@ export const AlbumDetail=()=>{
   }
   const { attributes,relationships } = Info
   const {artists,tracks}=relationships
-
   if (!attributes) {
     throw new Error(`attributes not found in resource: ${JSON.stringify(Info)}`)
   }
-  const { artwork, url,  name ,artistName,genreNames,editorialNotes} = attributes
+  const { artwork, url,  name ,curatorName,editorialNotes} = attributes
   const artworkUrl = artwork.url.replace('{w}', '400').replace('{h}', '400').replace('{c}', 'cc').replace('{f}', 'webp')
-
+const IncludedArtists=Info.views['featured-artists']
   return (
     <Wrapper>
       <HeadWrapper>
@@ -161,13 +156,9 @@ export const AlbumDetail=()=>{
           <Title>
             {name}
           </Title>
-          <div> {artists.data.map((v:any)=>
-            <ArtistJump artist={v}/>
-          )}</div>
-
-          <SubSubTitle>
-            {genreNames.join(' · ')}
-          </SubSubTitle>
+          <SubTitle>
+            {curatorName}
+          </SubTitle>
           <p>
             {editorialNotes?.short}
           </p>
@@ -175,7 +166,6 @@ export const AlbumDetail=()=>{
             <PlayButton onClick={playA}>
               <PlayIcon/>
               播放
-
             </PlayButton>
           </ControlWrapper>
         </DetailsWrapper>
@@ -183,14 +173,20 @@ export const AlbumDetail=()=>{
       </HeadWrapper>
 <TrackList>
   {tracks.data.map((v:any)=>
-  <TrackItem  key={v.id} attributes={v['attributes']}/>
+  <TrackItem  key={v.id} attributes={v['attributes']} relationships={v['relationships']}/>
   )}
 </TrackList>
 
-
+<Title style={{'marginTop':'40px','display':'block'}}>
+  专辑中的艺术家
+</Title>
+<ArtistsGrid>
+  {IncludedArtists['data'].map((v:any)=><ArtistResource key={v.id} value={v} />)}
+</ArtistsGrid>
     </Wrapper>
   )
 }
+
 const Container=styled.div`
 display: flex;
   border-radius: 10px;
@@ -198,17 +194,27 @@ display: flex;
   align-items: center;
   padding: 10px 15px;
   box-sizing: border-box;
-  svg{
-    opacity: 0;
-    color: #fa2138;
-    z-index: 1;
-    position: relative;
-    left: -10px;
-  }
 
+  img,.artworkImg{
+    width: 40px;height: 40px;
+    border-radius: 6px;
+    margin-right: 15px;
+    overflow: hidden;
+  }
+  svg{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 40px;
+    height: 40px;
+    z-index: 2;
+    fill:#fff;
+    transform:translate(-50%,-50%);
+
+  }
   &:hover{
-    background: rgba(214, 0, 23, 0.15);  
-    svg{
+    background: rgba(214, 0, 23, 0.15);
+    .artworkImg div{
       opacity: 1;
     }
   
@@ -222,10 +228,27 @@ margin-right: 10px;
   width: 25px;
   text-align: center;
 `
+const TrackInfo=styled.div`
+  display: grid;
+  width: auto;
+  flex: auto;
+  grid-template-columns: repeat(3, 1fr);
+  span{
+
+  }
+`
+
+
 const TrackDur=styled.span`
-  margin-left: auto;
+  position: relative;
+  right: 10px;
+  margin-left: 10px;
   margin-right: 10px;
   opacity: 0.7;
+  width: 40px;
+  flex-grow: 0!important;
+  
+
 `
 
 export const PlayIcon=()=>{
@@ -236,22 +259,55 @@ export const PlayIcon=()=>{
     </svg>
   )
 }
-const TrackItem=({attributes}:any)=>{
- const {trackNumber,name,url,durationInMillis}=attributes
+const ArtistJump=({artist}:any)=>{
+  const { push } = useHistory()
+  const ToArtist= useCallback(() => {
+    push(`/artist/${artist['id']}`)
+  }, [push,artist])
+  return(
+    <a onClick={ToArtist}>
+      {artist.attributes.name}
+    </a>
+  )
+
+
+}
+const TrackItem=({attributes,relationships}:any)=>{
+  // console.log(relationships)
+ const {trackNumber,name,url,artwork,durationInMillis,artistName,albumName}=attributes
+  const {artists}=relationships
   const play = useCallback(async () => {
     const music = MusicKit.getInstance()
     await music.setQueue({ url })
     await music.play()
   }, [])
-return(
+  // console.log(attributes)
+  const artworkUrl = artwork.url.replace('{w}', '320').replace('{h}', '320').replace('{c}', 'cc').replace('{f}', 'webp')
+
+  return(
   <Container onClick={play}>
-<PlayIcon/>
-    <TrackNumber>
-{trackNumber}
-    </TrackNumber>
+
+    <div style={{'width':'40px','height':'40px','position':'relative'}} className={'artworkImg'}>
+      <img src={artworkUrl} loading='lazy' width='100%' height='100%' alt='' />
+      <Overlay >
+        {/*<PlayButton>*/}
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 27'>
+          <path
+            d='M11.3545232,18.4180929 L18.4676039,14.242665 C19.0452323,13.9290954 19.0122249,13.1204156 18.4676039,12.806846 L11.3545232,8.63141809 C10.7603912,8.26833741 9.98471883,8.54889976 9.98471883,9.19254279 L9.98471883,17.8404645 C9.98471883,18.5006112 10.7108802,18.7976773 11.3545232,18.4180929 Z'></path>
+        </svg>
+        {/*</PlayButton>*/}
+      </Overlay>
+    </div>
+    <TrackInfo>
     <span style={{'fontWeight':700}}>
       {name}
     </span>
+    <span style={{'fontWeight':700}}>
+      {artists.data.map((v:any)=><ArtistJump artist={v}/>)}
+    </span>
+    <span style={{'fontWeight':700}}>
+      {albumName}
+    </span></TrackInfo>
     <TrackDur>
       {MusicKit.formatMediaTime(durationInMillis/1000,":")}
     </TrackDur>

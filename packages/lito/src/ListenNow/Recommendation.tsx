@@ -159,8 +159,7 @@ const Recommendation = ({ value }: RecommendationProps) => {
   }
   const showButtons = () => {
     let clientWidth1 = ResourceListDom.current!['clientWidth']
-    // let offsetWidth1= ResourceListDom.current!['offsetWidth']
-// console.log(clientWidth1,offsetWidth1)
+
     const { offsetWidth, clientWidth } = ResourceListScrollDom.current!
     // console.log(clientWidth,offsetWidth)
     setshowLeft(clientWidth + (ResourceListScrollDom.current as any).scrollLeft < clientWidth1)
@@ -227,7 +226,7 @@ export const ResourceWrapper = styled.div`
   width: 160px;
   height: 160px;
   border-radius: 10px;
-
+z-index: 2;
   box-shadow: 0 4px 14px rgb(0 0 0 / 10%);
 
   * {
@@ -240,10 +239,23 @@ export const ResourceWrapper = styled.div`
       display: block;
 
     }
+    .shadow{
+      display: block;
+    }
 
   }
-
-  overflow: hidden;
+  .shadow{
+    position: absolute;
+    top: 8px;
+    left: 0;
+    z-index: -1;
+    display:none;
+    transition-duration:300ms;
+    transition-delay:0ms;
+    filter: blur(4px) opacity(.6);
+    transform: scale(.92,.96);
+    
+  }
 `
 export const Title = styled.span`
   top: 20px;
@@ -313,11 +325,8 @@ export const PlayButton = styled.button`
 `
 
 const Resource = ({ value }: ResourceProps) => {
-
   const { attributes,type,id } = value
-
-
-  console.log(value)
+  // console.log(value)
   if (!attributes) {
     throw new Error(`attributes not found in resource: ${JSON.stringify(value)}`)
   }
@@ -334,6 +343,9 @@ const Resource = ({ value }: ResourceProps) => {
   const handleClick = useCallback(() => {
     if (type=='albums'){
       push(`/album/${id}`)
+    }else if(type=='playlists'){
+      push(`/playlist/${id}`)
+
     }
   }, [push,id])
   const play = useCallback(async () => {

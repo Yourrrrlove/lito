@@ -1,7 +1,8 @@
 import { useCallback } from 'react'
 import { Overlay, PlayButton, ResourceWrapper, Title } from '../ListenNow/Recommendation'
 import styled from 'styled-components'
-const SubTitle = styled.span`
+import { useHistory } from 'react-router'
+export const ArtistTitle = styled.span`
 top: 50%;
   transform: translate(0, -50%);
   font-size: 18px;
@@ -16,8 +17,11 @@ top: 50%;
 `
 export const ArtistResource = ({value}:any) => {
 
-    const { attributes } = value
-
+    const { attributes,id } = value
+  const { push } = useHistory()
+  const handleClick = useCallback(() => {
+    push(`/artist/${id}`)
+  }, [push,id])
 
     // console.log(value)
     if (!attributes) {
@@ -41,17 +45,18 @@ export const ArtistResource = ({value}:any) => {
         style={
           {
             '--background-color': `#${artwork.bgColor}`,
-            'border-radius':'50%'
+            'borderRadius':'50%'
           } as React.CSSProperties
         }
+onClick={handleClick}
       >
         <img src={artworkUrl} loading='lazy' width='100%' height='100%' alt='' />
         <Overlay>
 
 
-          <SubTitle>
+          <ArtistTitle>
             {name}
-          </SubTitle>
+          </ArtistTitle>
 
         </Overlay>
 

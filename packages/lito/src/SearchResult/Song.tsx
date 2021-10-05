@@ -70,7 +70,7 @@ export const SongResource = ({value}:any) => {
     >
 <div style={{'width':'40px','height':'40px','position':'relative'}} className={'artworkImg'}>
   <img src={artworkUrl} loading='lazy' width='100%' height='100%' alt='' />
-  <Overlay >
+  <Overlay  style={{'width':'40px'}}>
     {/*<PlayButton>*/}
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 27'>
         <path
