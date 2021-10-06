@@ -9,6 +9,7 @@ export const ListContext = React.createContext({ visible: false, setVisible(valu
 export const useListContext = () => React.useContext(ListContext)
 const Header = styled.div`
   padding: 13px 0;
+  margin-left: 20px;
   font-size: 1.8em;
   line-height: 2;
   font-weight: 800;
@@ -18,7 +19,7 @@ const Header = styled.div`
 const Wrapper = styled.div`
   position: fixed;
   padding-top: 50px;
-  padding-left: 20px;
+  box-sizing: border-box;
   
   top: 0;
   right: 0;
@@ -32,6 +33,7 @@ const Wrapper = styled.div`
     pointer-events: initial;
     width: 25vw;
     min-width: 300px;
+
   }
 `
 const TrackList=styled.div`
@@ -39,8 +41,9 @@ display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  margin-left: 0px;
+  margin-left: 20px;
   margin-right: 20px;
+  
 `
 const Container=styled.div`
 display: flex;
