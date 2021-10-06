@@ -51,7 +51,7 @@ overflow: visible;
 }
 `
 
-const TrackList=styled.div`
+export const TrackList=styled.div`
 display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -112,11 +112,7 @@ export const AlbumDetail=()=>{
 
   let id= (useParams() as any)['id']
   console.log(id)
-  const playA = useCallback(async () => {
-    const music = MusicKit.getInstance()
-    await music.setQueue({ url })
-    await music.play()
-  }, [])
+
 
   const { data: infos, error } = useSWR(
     () => {
@@ -137,6 +133,12 @@ export const AlbumDetail=()=>{
 
 
   const Info=infos?.[0]
+  const playA = useCallback(async () => {
+
+    const music = MusicKit.getInstance()
+    await music.setQueue({ url:Info['attributes']['url'] })
+    await music.play()
+  }, [Info])
   if(!Info){
     return <Nothing placeholder="loading" />
   }
@@ -162,7 +164,7 @@ export const AlbumDetail=()=>{
             {name}
           </Title>
           <div> {artists.data.map((v:any)=>
-            <ArtistJump artist={v}/>
+            <ArtistJump key={v['id']} artist={v}/>
           )}</div>
 
           <SubSubTitle>
@@ -183,7 +185,7 @@ export const AlbumDetail=()=>{
       </HeadWrapper>
 <TrackList>
   {tracks.data.map((v:any)=>
-  <TrackItem  key={v.id} attributes={v['attributes']}/>
+  <TrackItem  key={v['id']} attributes={v['attributes']}/>
   )}
 </TrackList>
 

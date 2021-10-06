@@ -19,6 +19,7 @@ import SearchResult from './SearchResult'
 import { AlbumDetail } from './AlbumDetail'
 import { ArtistDetail } from './ArtistDetail'
 import { PlayListDetail } from './PlayListDetail'
+import { ListContext, QueueList } from './PlayList/PlayList'
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -65,6 +66,8 @@ const App = () => {
   const [theme, setTheme] = useState(lightTheme)
   const authorized = useAuthorized()
   const [lyricsVisible, setLyricsVisible] = useState(false)
+  const [listVisible, setListVisible] = useState(false)
+
   return (
     <SetThemeContext.Provider value={setTheme}>
       <ThemeProvider theme={theme}>
@@ -75,6 +78,8 @@ const App = () => {
           }}
         >
           <LyricsContext.Provider value={{ visible: lyricsVisible, setVisible: setLyricsVisible }}>
+            <ListContext.Provider value={{ visible: listVisible, setVisible: setListVisible }}>
+
             <Wrapper>
               <Router>
                 <Sidebar />
@@ -83,6 +88,7 @@ const App = () => {
                     {authorized ? (
                       <>
                         <Player />
+                        <QueueList/>
                         <Route path="/" component={ListenNow} exact/>
                         <Route path="/search/:text" component={SearchResult} />
                         <Route path="/album/:id" component={AlbumDetail} />
@@ -101,7 +107,10 @@ const App = () => {
               <ControlButtons />
               <Lyrics />
             </Wrapper>
+
+            </ListContext.Provider>
           </LyricsContext.Provider>
+
         </SWRConfig>
       </ThemeProvider>
     </SetThemeContext.Provider>

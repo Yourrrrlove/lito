@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import LyricsButton from './LyricsButton'
 import { isMacOS } from './utils'
+import { PlayListButton } from './PlayList/Icon'
 
 const Wrapper = styled.div`
   position: fixed;
@@ -18,7 +19,9 @@ const Wrapper = styled.div`
 const ControlButtons = () => {
   return (
     <Wrapper>
+      <PlayListButton/>
       <LyricsButton />
+
     </Wrapper>
   )
 }

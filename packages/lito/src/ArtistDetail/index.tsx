@@ -109,7 +109,7 @@ export const ArtistDetail=()=>{
 
         </ImgWrapper>
 <PlayWrapper>
-  <div className={'playButton'}>
+  <div className={'playButton'} onClick={playA}>
     <PlayIcon/>
 
   </div>
