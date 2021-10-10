@@ -1,11 +1,10 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useSetTheme } from '../GlobalThemeContext'
 import { useTranslation } from 'react-i18next'
 import { PlayIcon } from '../AlbumDetail'
 
 export const ListContext = React.createContext({ visible: false, setVisible(value: boolean) {} })
-
 export const useListContext = () => React.useContext(ListContext)
 const Header = styled.div`
   padding: 13px 0;
@@ -46,13 +45,14 @@ display: flex;
   
 `
 const Container=styled.div`
-display: flex;
+  display: flex;
   border-radius: 10px;
   width: 100%;
   align-items: center;
   padding: 10px 5px;
   box-sizing: border-box;
-  svg{
+
+  svg {
     opacity: 0;
     color: #fa2138;
     z-index: 1;
@@ -60,15 +60,20 @@ display: flex;
     left: -10px;
   }
 
-  &:hover{
-    background: rgba(214, 0, 23, 0.15);  
-    svg{
+  &.active {
+    background-color: rgba(250, 130, 141, 0.75) !important;
+  }
+
+  &:hover {
+    background: rgba(214, 0, 23, 0.15);
+
+    svg {
       opacity: 1;
     }
-  
+
   }
-  
-  
+
+
 `
 const TrackNumber=styled.div`
 margin-right: 10px;
@@ -81,16 +86,18 @@ const TrackDur=styled.span`
   margin-right: 10px;
   opacity: 0.7;
 `
-const TrackItem=({attributes,index}:any)=>{
+const TrackItem=({attributes,index,active}:any)=>{
   const {name,durationInMillis}=attributes
   const play = useCallback(async () => {
-    console.log(index)
+    // console.log(index)
     const music = MusicKit.getInstance()
     await music.changeToMediaAtIndex(index)
     // await music.play()
   }, [index])
+
   return(
-    <Container onClick={play}>
+
+    <Container onClick={play} className={active?'active':''}>
       <TrackNumber>
         {index+1}
       </TrackNumber>
@@ -104,13 +111,43 @@ const TrackItem=({attributes,index}:any)=>{
   )
 }
 export const QueueList=()=>{
+  const [playList, setPlayList] = useState([])
+  const [playItem, setPlayItem] = useState(0)
+  const music = MusicKit.getInstance()
+
+  useEffect(()=>{
+    function handlePlayListChange(e:any){
+      // console.log(1)
+      // console.log(1,e)
+      setPlayList(e)
+    }
+    music.addEventListener('queueItemsDidChange',handlePlayListChange)
+
+// @ts-ignore
+    return ()=>music.removeEventListener('queueItemsDidChange',handlePlayListChange)
+  },[music])
+  useEffect(()=>{
+    function handlePlayItemChange(e:any){
+      console.log(1)
+      console.log(1,e)
+      setPlayItem(e['position'])
+    }
+    music.addEventListener('queuePositionDidChange',handlePlayItemChange)
+
+// @ts-ignore
+    return ()=>music.removeEventListener('queuePositionDidChange',handlePlayItemChange)
+  },[music])
   const { visible } = useListContext()
   const {t} =useTranslation()
   // @ts-ignore
-  console.log(MusicKit.getInstance(),MusicKit.getInstance().queue)
-  // @ts-ignore
-  const {position,items}=MusicKit.getInstance().queue
-  console.log(position,items)
+  // console.log(MusicKit.getInstance(),MusicKit.getInstance().queue)
+  useEffect(()=>{
+    // @ts-ignore
+    const {position,items}=MusicKit.getInstance().queue
+    // console.log(position,items)
+    setPlayList(items)
+    setPlayItem(position)
+  },[])
   return (
     <Wrapper
       className={visible ? 'visible' : ''}>
@@ -119,8 +156,8 @@ export const QueueList=()=>{
 
       </Header>
 <TrackList>
-  {items.map((v:MusicKit.MediaItem,i:number)=>
-    <TrackItem attributes={v['attributes']} index={i}/>
+  {playList.map((v:MusicKit.MediaItem,i:number)=>
+    <TrackItem attributes={v['attributes']} index={i} active={i==playItem}/>
 
   )}
 </TrackList>

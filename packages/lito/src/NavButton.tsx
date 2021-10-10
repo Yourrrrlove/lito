@@ -15,6 +15,7 @@ const Button = styled.button`
   border-radius: 5px;
   text-align: left;
   background-color: transparent;
+  
   &.active,&:hover {
     background-color: rgba(60, 60, 67, 0.1);
   }
