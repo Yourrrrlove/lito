@@ -23,7 +23,7 @@
 - 操作系统版本 ≥ Windows 10 或 macOS 11.0。
 - 对 Windows：Edge WebView2 运行时 (预装于 Windows 10 Insider Preview 和 Windows 11)。  
   若未安装，Lito Music 会在首次启动时尝试下载和安装。
-
+- 应用默认字体为`思源宋体`，请安装以获得较好体验。
 ## 下载
 
 > 注意：Windows Defender 可能会对预编译版本产生误报。代码签名应当可以解决问题，但[其价格](https://www.google.com/search?q=code+signing+certificates+price)对开源软件开发者并不友好。如果你对此感到介意，欢迎[在自己的机器上构建](#构建)。
@@ -35,6 +35,17 @@
 ### 现在就听
 
 <img src="https://user-images.githubusercontent.com/3000535/134794764-e974e026-c719-49b5-871f-72466078d4af.png" width="1000" alt="Lito Music (现在就听)" />
+
+### 搜索
+
+![image](https://user-images.githubusercontent.com/44310445/136697622-e9c5b484-0979-4f74-accb-195cc84a7445.png)
+
+### 详细信息页
+
+![image](https://user-images.githubusercontent.com/44310445/136697640-ebea8f29-2c8e-4180-997d-c69dcf03d1b2.png)
+
+![image](https://user-images.githubusercontent.com/44310445/136697646-a2123920-eee3-4b9e-9ab1-65529566be43.png)
+
 
 ### 时间同步歌词
 
