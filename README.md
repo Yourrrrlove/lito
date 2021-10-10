@@ -21,6 +21,7 @@
 - OS version ≥ Windows 10 / macOS 11.0.
 - For Windows: Edge WebView2 runtime (pre-installed in Windows 10 Insider Preview and Windows 11).  
   If not installed, Lito Music will try to download and install it at the first launch.
+- `Source Han Serif` Font is Prefered for better outlook.You can get it from [here](https://github.com/adobe-fonts/source-han-serif).
 
 ## Downloads
 
