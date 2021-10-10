@@ -4,9 +4,7 @@
     Lito Music
   </a>
 </h1>
-<p align="center">
-  <a href="https://github.com/lujjjh/lito/releases"><img alt="GitHub release (latest SemVer)" src="https://img.shields.io/github/v/release/lujjjh/lito?sort=semver" /></a>
-</p>
+
 <p align="center">
   English
   |
@@ -36,8 +34,17 @@ Pre-compiled binaries are available [here][releases].
 
 ### Listen now
 
-<img src="https://user-images.githubusercontent.com/3000535/134794764-e974e026-c719-49b5-871f-72466078d4af.png" width="1000" alt="Lito Music (listen now)" />
+![image](https://user-images.githubusercontent.com/44310445/136697600-4c4c1100-14f4-4c54-877f-b8cb445aac54.png)
 
+### Search
+
+![image](https://user-images.githubusercontent.com/44310445/136697622-e9c5b484-0979-4f74-accb-195cc84a7445.png)
+
+### Details
+
+![image](https://user-images.githubusercontent.com/44310445/136697640-ebea8f29-2c8e-4180-997d-c69dcf03d1b2.png)
+
+![image](https://user-images.githubusercontent.com/44310445/136697646-a2123920-eee3-4b9e-9ab1-65529566be43.png)
 
 ### Time-synced lyrics
 
