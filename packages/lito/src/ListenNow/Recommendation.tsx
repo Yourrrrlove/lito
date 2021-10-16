@@ -272,9 +272,16 @@ export const SubTitle = styled.span`
   left: 20px;
   right: 20px;
   text-align: center;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 20px;
   white-space: pre-wrap;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  display: -webkit-box;
+
+
+
   //z-index: 10;
 `
 export const Overlay = styled.div`

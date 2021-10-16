@@ -18,7 +18,8 @@
       "albums": "专辑",
       "songs":"歌曲",
       "playlists": "播放列表",
-      "artists": "歌手"
+      "artists": "歌手",
+      "radio": "广播电台"
 
     }
   }

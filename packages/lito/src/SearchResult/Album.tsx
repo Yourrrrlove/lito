@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { Overlay, PlayButton, ResourceWrapper, SubTitle, Title } from '../ListenNow/Recommendation'
 import { useHistory } from 'react-router'
 
-export const AlbumResource = ({value,noHover}:any) => {
+export const AlbumResource = ({value,noHover,noAlbum}:any) => {
 
   const { attributes,id } = value
 
@@ -27,6 +27,7 @@ export const AlbumResource = ({value,noHover}:any) => {
   }, [])
   const { push } = useHistory()
   const handleClick = useCallback(() => {
+    if(noAlbum) return
     push(`/album/${id}`)
   }, [push,id])
   return (

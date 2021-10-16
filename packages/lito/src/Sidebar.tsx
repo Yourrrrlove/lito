@@ -60,14 +60,18 @@ align-items: center;
   img{
     margin-right: 10px;
   }
+  span{
+    line-height:22px;
+  }
   
 
 `
 import partypopper from '/asserts/party-popper.png'
+import radio from '/asserts/radio.png'
 const Sidebar = () => {
   const { t } = useTranslation()
   return (
-    <Wrapper>
+   <Wrapper>
       <Logo />
       <ul>
         <li>
@@ -75,8 +79,11 @@ const Sidebar = () => {
         </li>
         <li>
           <NavButton to="/">
-            <FlexDiv><img src={partypopper} width={'22px'} height={'22px'}/>{t('listenNow')}</FlexDiv>
+            <FlexDiv><img src={partypopper} width={'22px'} height={'22px'}/><span>{t('listenNow')}</span></FlexDiv>
             </NavButton>
+          <NavButton to="/radio">
+            <FlexDiv><img src={radio} width={'22px'} height={'22px'}/><span style={{'marginTop':'4px'}}>{t('radio')}</span></FlexDiv>
+          </NavButton>
         </li>
       </ul>
     </Wrapper>

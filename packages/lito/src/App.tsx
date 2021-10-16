@@ -20,6 +20,7 @@ import { AlbumDetail } from './AlbumDetail'
 import { ArtistDetail } from './ArtistDetail'
 import { PlayListDetail } from './PlayListDetail'
 import { ListContext, QueueList } from './PlayList/PlayList'
+import { Radio } from './Radio'
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -96,6 +97,7 @@ const App = () => {
                         <Route path="/playlist/:id" component={PlayListDetail} />
 
                         <Route path="/search" component={SearchResult} exact />
+                        <Route path="/radio" component={Radio} exact />
 
                       </>
                     ) : (

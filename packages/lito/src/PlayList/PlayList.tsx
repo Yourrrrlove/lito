@@ -28,11 +28,16 @@ const Wrapper = styled.div`
   z-index: 98;
   transition: width 0.5s cubic-bezier(0.4, 0, 1, 1);
   pointer-events: none;
+  *{
+    opacity: 0;
+  }
   &.visible {
     pointer-events: initial;
     width: 25vw;
-    min-width: 300px;
-
+    //min-width: 300px;
+    *{
+      opacity: 1;
+    }
   }
 `
 const TrackList=styled.div`

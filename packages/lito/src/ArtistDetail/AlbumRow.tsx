@@ -70,13 +70,14 @@ const ResourceList = styled.div`
   &.AlbumHeader{
     display: grid !important;
     grid-template-columns: repeat(4, 1fr);
-    width: 100%;
+    width: calc(100% - 30px);
     
     .AlbumWrapper{
       overflow: hidden;
       border-radius: 8px;
       z-index: 2;
       min-width: 165px;
+      //background:#E5E5E5;
       //border: lightgray 1px solid;
       &>img{
        z-index: -1; 

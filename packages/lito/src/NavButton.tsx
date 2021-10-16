@@ -9,15 +9,19 @@ export interface NavButtonProps {
 
 const Button = styled.button`
   width: 100%;
-  height: 32px;
-  padding: 0 12px;
+  height: 42px;
+  padding: 5px 12px;
   line-height: 32px;
-  border-radius: 5px;
+  border-radius: 6px  0 0 6px;
   text-align: left;
   background-color: transparent;
-  
+  margin:5px 0px;
   &.active,&:hover {
     background-color: rgba(60, 60, 67, 0.1);
+  }
+  &.active{
+    border-right: grey 5px solid;
+
   }
 `
 
