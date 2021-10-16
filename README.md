@@ -45,7 +45,7 @@ Pre-compiled binaries are available [here][releases].
 
 ![image](https://user-images.githubusercontent.com/44310445/137575562-6082927b-76ac-4cbe-b218-999598ba12df.png)
 
-![image](https://user-images.githubusercontent.com/44310445/137575500-3408c8c4-04df-4b18-be60-a061c1c8d5d9.png)
+![image](https://user-images.githubusercontent.com/44310445/137575691-3ccdd82f-cc74-4fc3-be60-bce48abaefb4.png)
 ### Time-synced lyrics
 
 ![image](https://user-images.githubusercontent.com/44310445/137575591-85736317-d17f-49d9-ad0d-5881239c0226.png)
