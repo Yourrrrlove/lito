@@ -35,7 +35,7 @@ Pre-compiled binaries are available [here][releases].
 
 ### Listen now
 
-![image](https://user-images.githubusercontent.com/44310445/136697600-4c4c1100-14f4-4c54-877f-b8cb445aac54.png)
+![image](https://user-images.githubusercontent.com/44310445/137575542-f6801755-3c63-426d-a704-6edbf2afad01.png)
 
 ### Search
 
@@ -43,13 +43,16 @@ Pre-compiled binaries are available [here][releases].
 
 ### Details
 
-![image](https://user-images.githubusercontent.com/44310445/136697640-ebea8f29-2c8e-4180-997d-c69dcf03d1b2.png)
+![image](https://user-images.githubusercontent.com/44310445/137575562-6082927b-76ac-4cbe-b218-999598ba12df.png)
 
-![image](https://user-images.githubusercontent.com/44310445/136697646-a2123920-eee3-4b9e-9ab1-65529566be43.png)
-
+![image](https://user-images.githubusercontent.com/44310445/137575500-3408c8c4-04df-4b18-be60-a061c1c8d5d9.png)
 ### Time-synced lyrics
 
-<img src="https://user-images.githubusercontent.com/3000535/134794792-0f0a4a56-c95b-4b02-966c-cbb71c90df20.png" width="1000" alt="Lito Music (time-synced lyrics)" />
+![image](https://user-images.githubusercontent.com/44310445/137575591-85736317-d17f-49d9-ad0d-5881239c0226.png)
+### Radio
+> Not Working with My Account. Test on your risk.
+
+![image](https://user-images.githubusercontent.com/44310445/137575534-653ba362-4810-4e23-85dd-59623e4e5e9a.png)
 
 ## Build
 
