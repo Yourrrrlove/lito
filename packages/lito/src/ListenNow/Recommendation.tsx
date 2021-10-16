@@ -355,7 +355,8 @@ const Resource = ({ value }: ResourceProps) => {
 
     }
   }, [push,id])
-  const play = useCallback(async () => {
+  const play = useCallback(async (e) => {
+    e.stopPropagation()
     const music = MusicKit.getInstance()
     await music.setQueue({ url })
     await music.play()

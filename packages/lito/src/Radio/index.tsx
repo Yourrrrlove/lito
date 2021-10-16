@@ -21,7 +21,9 @@ const SubWrapper = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-
+  .AlbumWrapper{
+    max-width: 180px!important;
+  }
   &:hover {
     .left-button, .right-button {
       opacity: 1;
@@ -35,7 +37,7 @@ const SubWrapper = styled.div`
     
   }
 `
-const FeatureGrid = styled.div`
+export  const FeatureGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, auto);
   grid-row-gap: 30px;
@@ -43,6 +45,7 @@ const FeatureGrid = styled.div`
   padding-left: 30px;
   margin-top: 20px;
   margin-bottom: 20px;
+
 `
 const Header = styled.div`
   margin: 32px 40px 16px;
@@ -84,7 +87,23 @@ export const Radio = () => {
         {
           features.map((v: any) => {
             if (!v['attributes']['name'])
-              return <FeatureCard attributes={v['attributes']} relationships={v['relationships']} key={v['id']} />
+            {
+              if (!v.relationships || !v.relationships.children || v.relationships.children.data.length == 0) {
+                return null
+              }
+              // console.log(relationships)
+              const relationship = v.relationships.children.data[0].relationships
+              const attributes = v.relationships.children.data[0].attributes
+              // console.log(attributes, relationship)
+
+              const { artwork, designBadge, designTag } = attributes
+
+              const { name, url } = relationship.contents.data[0].attributes
+              return <FeatureCard  key={v['id']} name={name} artworkurl={artwork.url} url={url} subtitle={designBadge} info={designTag} />
+
+            }else {
+              return null
+            }
 
           })
         }
@@ -175,8 +194,8 @@ const data=relationships.contents.data;
           <ResourceList ref={ResourceListDom} >
 
             {data.map((value:any) => (
-              <div className={'AlbumWrapper'} >
-                <AlbumResource key={value.id} value={value} noHover noAlbum  />
+              <div className={'AlbumWrapper'} key={value.id} >
+                <AlbumResource  value={value} noHover noAlbum  />
                 <span className={'title'}>
     {value['attributes']['name']}
   </span>

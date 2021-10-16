@@ -27,7 +27,7 @@ const Wrapper = styled.div`
   }
 
   li {
-    margin: 0 10px;
+    margin-left:  10px;
   }
 
   a {

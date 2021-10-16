@@ -133,7 +133,7 @@ const ResultList = ({ value,isHeader }: any) => {
 
   }, [])
   useResizeObserver(ResourceListScrollDom,showButtons)
-console.log(value)
+// console.log(value)
   return (
     <Wrapper>
       {showLeft ? (<LeftButton style={{'marginTop': '80px'}} className='left-button' onClick={() => ScrollLeft(false)}>

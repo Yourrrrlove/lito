@@ -6,6 +6,8 @@ import Nothing from '../Nothing'
 import { PlayIcon } from '../AlbumDetail'
 import AlbumRow from './AlbumRow'
 import { SongGrid } from '../SearchResult/SongGrid'
+import { FeatureGrid } from '../Radio'
+import { FeatureCard } from '../Radio/FeatureCard'
 
 const Wrapper = styled.div`
   padding-bottom: 32px;
@@ -119,7 +121,13 @@ export const ArtistDetail=()=>{
 </PlayWrapper>
       </HeadWrapper>
       {
-        views['featured-albums']['data'].length>0? <AlbumRow value={views['featured-albums']} isHeader/>:null
+        views['featured-albums']['data'].length>0? <FeatureGrid className={'FeatureGrid'} style={{'paddingLeft':'0px'}}>
+          {views['featured-albums']['data'].map((v:any)=>{
+            console.log(2,v)
+            const {artistName,artwork,editorialNotes,name}=v.attributes
+          return   <FeatureCard name={name} subtitle={artistName} artworkurl={artwork.url} info={editorialNotes?.short}/>
+          })}
+        </FeatureGrid>:null
       }
 
       <AlbumRow value={views['full-albums']}/>

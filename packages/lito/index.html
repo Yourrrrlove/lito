@@ -50,6 +50,7 @@
               grid-template-rows: repeat(var(--grid-rows), max-content);
               grid-column-gap: var(--grid-column-gap)
           }
+
       }
 
       @media only screen and (min-width: 1260px) {
@@ -58,6 +59,10 @@
               grid-template-rows: repeat(var(--grid-rows), -webkit-max-content);
               grid-template-rows: repeat(var(--grid-rows), max-content);
               grid-column-gap: var(--grid-column-gap)
+          }
+          .FeatureGrid{
+              grid-template-columns: repeat(2, auto) !important;
+
           }
       }
 
@@ -68,6 +73,10 @@
               grid-template-rows: repeat(var(--grid-rows), max-content);
               grid-column-gap: var(--grid-column-gap)
           }
+          .FeatureGrid{
+              grid-template-columns: repeat(3, auto) !important;
+
+          }
       }
 
       @media only screen and (min-width: 1940px) {
@@ -76,6 +85,10 @@
               grid-template-rows: repeat(var(--grid-rows), -webkit-max-content);
               grid-template-rows: repeat(var(--grid-rows), max-content);
               grid-column-gap: var(--grid-column-gap)
+          }
+          .FeatureGrid{
+              grid-template-columns: repeat(4, auto) !important;
+
           }
       }
   </style>
