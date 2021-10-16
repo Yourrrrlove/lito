@@ -10,14 +10,15 @@ const Wrapper = styled.div`
   max-width: 500px;
   min-width: 220px;
   border-radius: 15px;
-  background: #E5E5E5;
-  opacity: 0.75;
+  background: rgba(229,229,229,0.75);
+  //opacity: 0.75;
 
   img {
     width: 180px;
     height: 180px;
     object-fit: cover;
     border-radius: 10px;
+    opacity: 1;
   }
 
 `
