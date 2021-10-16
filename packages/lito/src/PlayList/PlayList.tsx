@@ -54,16 +54,17 @@ const Container=styled.div`
   border-radius: 10px;
   width: 100%;
   align-items: center;
+  margin-top: 2px;
   padding: 10px 5px;
   box-sizing: border-box;
 
-  svg {
-    opacity: 0;
-    color: #fa2138;
-    z-index: 1;
-    position: relative;
-    left: -10px;
-  }
+  //svg {
+  //  opacity: 0;
+  //  color: #fa2138;
+  //  z-index: 1;
+  //  position: relative;
+  //  left: -10px;
+  //}
 
   &.active {
     background-color: rgba(250, 130, 141, 0.75) !important;
@@ -91,6 +92,38 @@ const TrackDur=styled.span`
   margin-right: 10px;
   opacity: 0.7;
 `
+const AudioIcon=()=>{
+  return(
+    <svg width="18" height="18" viewBox="0 0 55 80" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+      <g transform="matrix(1 0 0 -1 0 80)">
+        <rect width="10" height="20" rx="3">
+          <animate attributeName="height"
+                   begin="0s" dur="4.3s"
+                   values="20;45;57;80;64;32;66;45;64;23;66;13;64;56;34;34;2;23;76;79;20" calcMode="linear"
+                   repeatCount="indefinite" />
+        </rect>
+        <rect x="15" width="10" height="80" rx="3">
+          <animate attributeName="height"
+                   begin="0s" dur="2s"
+                   values="80;55;33;5;75;23;73;33;12;14;60;80" calcMode="linear"
+                   repeatCount="indefinite" />
+        </rect>
+        <rect x="30" width="10" height="50" rx="3">
+          <animate attributeName="height"
+                   begin="0s" dur="1.4s"
+                   values="50;34;78;23;56;23;34;76;80;54;21;50" calcMode="linear"
+                   repeatCount="indefinite" />
+        </rect>
+        <rect x="45" width="10" height="30" rx="3">
+          <animate attributeName="height"
+                   begin="0s" dur="2s"
+                   values="30;45;13;80;56;72;45;76;34;23;67;30" calcMode="linear"
+                   repeatCount="indefinite" />
+        </rect>
+      </g>
+    </svg>
+  )
+}
 const TrackItem=({attributes,index,active}:any)=>{
   const {name,durationInMillis}=attributes
   const play = useCallback(async () => {
@@ -104,7 +137,9 @@ const TrackItem=({attributes,index,active}:any)=>{
 
     <Container onClick={play} className={active?'active':''}>
       <TrackNumber>
-        {index+1}
+        {active?(
+          <AudioIcon/>
+        ):(<span>{index+1}</span>)}
       </TrackNumber>
       <span style={{'fontWeight':700}}>
       {name}
