@@ -54,6 +54,13 @@ Pre-compiled binaries are available [here][releases].
 
 ![image](https://user-images.githubusercontent.com/44310445/137575534-653ba362-4810-4e23-85dd-59623e4e5e9a.png)
 
+### Desktop Lyrics （Windows Only)
+> Some Codes From [@lujjjh](https://github.com/lujjjh/iLyrics). 
+> This is still an `Alpha Feature`.
+
+![image](https://user-images.githubusercontent.com/44310445/137617076-c65d04f7-5c51-404b-9c6a-3636cdbad013.png)
+
+
 ## Build
 
 ### For Windows
