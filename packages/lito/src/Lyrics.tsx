@@ -64,6 +64,11 @@ const BlurWrapper = styled.div`
   }
 `
 export const sendLyrics=(lastline:string,thisline:string)=>{
+  console.log(lastline,thisline)
+  // @ts-ignore
+  if(!window.chrome||!window.chrome.webview||!window.chrome.webview.postMessage){
+    return
+  }
   // @ts-ignore
   window.chrome.webview.postMessage({ event: "LyricsUpdate",data:`${lastline}&##&${thisline}` })
 }
@@ -95,18 +100,25 @@ const Lyrics = () => {
     if (lineIndex === -1) return undefined
     return lineIndex
   }, [currentTimeInMs])
+
   const ref = useRef<HTMLDivElement>(null)
   const [lastScrollAt, setLastScrollAt] = useState(0)
   const blurBehindDelayAfterScroll = 1000
   const [blurBehind, setBlurBehind] = useState(true)
+  useEffect(()=>{
+    if(!playerRef) return;
+    playerRef.addEventListener('ended',()=>{sendLyrics('','')})
+return ()=>{
+  playerRef.removeEventListener('ended',()=>{sendLyrics('','')})
+}
+  },[playerRef])
   useEffect(() => {
     if (activeIndex === undefined) return
     const wrapper = ref.current
     if (!wrapper) return
     const line = wrapper.getElementsByTagName('p')[activeIndex]
+    sendLyrics(lyrics?.lines[activeIndex-1]?.text??"",lyrics?.lines[activeIndex]?.text??"")
     if (line) {
-      sendLyrics(lyrics?.lines[activeIndex-1]?.text??"",lyrics?.lines[activeIndex]?.text??"")
-
       if (Date.now() - lastScrollAt >= blurBehindDelayAfterScroll) {
         line.scrollIntoView({ block: 'center', behavior: 'smooth' })
         setBlurBehind(true)
