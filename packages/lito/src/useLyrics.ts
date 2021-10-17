@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import useSWRImmutable from 'swr/immutable'
 import useNowPlayingItem from './useNowPlayingItem'
+import { sendLyrics } from './Lyrics'
 
 export interface Lyrics {
   lines: LyricsLine[]
@@ -35,6 +36,9 @@ const parseTime = (timeString: string) => {
 const useLyrics = () => {
   const nowPlayingItem = useNowPlayingItem()
   const id = useMemo(() => nowPlayingItem?.id, [nowPlayingItem])
+  useMemo(()=>{
+    sendLyrics("","")
+  },[nowPlayingItem])
   const { data, isValidating, error } = useSWRImmutable(
     () => {
       if (id === undefined) {

@@ -1,3 +1,4 @@
+use std::ffi::CString;
 use bindings::{
     Microsoft::Web::WebView2::Win32::{
         ICoreWebView2, ICoreWebView2WebMessageReceivedEventArgs,
@@ -34,6 +35,7 @@ pub struct MainForm {
     _notification_icon: NotificationIcon,
     composition: WebViewFormComposition,
     webview: webview::WebView,
+    lyric_hwnd:Option<HWND>,
 }
 
 pub fn init() -> Result<()> {
@@ -41,6 +43,7 @@ pub fn init() -> Result<()> {
     form::register_class(CLASS_NAME, Some(wndproc))?;
     Ok(())
 }
+
 
 fn create_window() -> Result<HWND> {
     let h_wnd = form::create_window(
@@ -64,6 +67,11 @@ fn create_window() -> Result<HWND> {
 }
 
 impl MainForm {
+    pub fn set_lyric(&mut self, l_hwnd:HWND) -> Result<()>{
+self.lyric_hwnd= Some(l_hwnd);
+Ok(())
+
+    }
     pub fn create() -> Result<Self> {
         let h_wnd = create_window()?;
         unsafe {
@@ -97,6 +105,7 @@ impl MainForm {
             h_wnd,
             _notification_icon: notification_icon,
             webview,
+            lyric_hwnd:None,
             composition: webview_composition,
         })
     }
@@ -164,6 +173,7 @@ impl MainForm {
                                 COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL,
                             )
                             .unwrap();
+
                         let mut _token = Default::default();
                         webview2
                             .add_WebResourceRequested(
@@ -282,10 +292,12 @@ impl MainForm {
         enum Message {
             CaptionMouseDown,
             CaptionDblClick,
+            LyricsUpdate {data:  String}
         }
         match serde_json::from_str::<'_, Message>(message.as_ref()) {
             Ok(message) => match message {
                 Message::CaptionMouseDown => {
+
                     KeyboardAndMouseInput::ReleaseCapture();
                     WindowsAndMessaging::SendMessageW(
                         self.h_wnd,
@@ -302,6 +314,24 @@ impl MainForm {
                         WPARAM(WindowsAndMessaging::HTCAPTION as _),
                         LPARAM::default(),
                     );
+                }
+                Message::LyricsUpdate{data} =>{
+                    println!("{:?}",data);
+
+                    let param: CString =CString::new(data).unwrap();
+
+                    println!("{:?}",param);
+                    println!("{:?}",param.as_ptr());
+
+                    WindowsAndMessaging::SendMessageW(
+                        self.lyric_hwnd.unwrap(),
+                        WindowsAndMessaging::WM_COPYDATA ,
+                        WPARAM(WindowsAndMessaging::HTCAPTION as _),
+                        LPARAM(param.into_raw() as isize ),
+                    );
+
+                    // println!("{}",data);
+
                 }
             },
             Err(e) => {

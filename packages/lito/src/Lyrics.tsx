@@ -4,7 +4,7 @@ import { useSetTheme } from './GlobalThemeContext'
 import Nothing from './Nothing'
 import { usePlaybackState, usePlayerRef } from './Player/ProgressControl'
 import { darkTheme, lightTheme } from './themes'
-import useLyrics from './useLyrics'
+import useLyrics, { LyricsLine } from './useLyrics'
 import useNowPlayingItem from './useNowPlayingItem'
 
 export const LyricsContext = React.createContext({ visible: false, setVisible(value: boolean) {} })
@@ -63,7 +63,10 @@ const BlurWrapper = styled.div`
     filter: none;
   }
 `
-
+export const sendLyrics=(lastline:string,thisline:string)=>{
+  // @ts-ignore
+  window.chrome.webview.postMessage({ event: "LyricsUpdate",data:`${lastline}&##&${thisline}` })
+}
 const Lyrics = () => {
   const { visible } = useLyricsContext()
   const setTheme = useSetTheme()
@@ -82,7 +85,7 @@ const Lyrics = () => {
   const { lyrics, error } = useLyrics()
   // TODO: Algorithm should be optimized.
   const currentTimeInMs = useMemo(() => {
-    if (!visible) return undefined
+    // if (!visible) return undefined
     if (currentTime === undefined) return undefined
     return currentTime * 1000 + 200
   }, [visible, currentTime])
@@ -102,6 +105,8 @@ const Lyrics = () => {
     if (!wrapper) return
     const line = wrapper.getElementsByTagName('p')[activeIndex]
     if (line) {
+      sendLyrics(lyrics?.lines[activeIndex-1]?.text??"",lyrics?.lines[activeIndex]?.text??"")
+
       if (Date.now() - lastScrollAt >= blurBehindDelayAfterScroll) {
         line.scrollIntoView({ block: 'center', behavior: 'smooth' })
         setBlurBehind(true)
@@ -112,11 +117,15 @@ const Lyrics = () => {
     setLastScrollAt(Math.floor(Date.now() / 100) * 100)
     setBlurBehind(false)
   }, [])
+
+
+
   const handleClick = useCallback(
     (index: number) => {
       if (!playerRef) return
       const line = lyrics?.lines[index]
       if (!line) return
+      sendLyrics(lyrics?.lines[index-1]?.text??"",lyrics?.lines[index]?.text??"")
       playerRef.currentTime = line.begin / 1000
     },
     [lyrics, playerRef]
