@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { useCallback } from 'react'
 import { Overlay, PlayButton } from '../ListenNow/Recommendation'
+import { useHistory } from 'react-router'
 
 const Wrapper = styled.div`
   display: flex;
@@ -55,19 +56,34 @@ border-radius: 10px;
 
 
 `
-export const FeatureCard = ({ name,url,subtitle,info,artworkurl }: any) => {
+export const FeatureCard = ({ name,url,subtitle,info,artworkurl,isAlbum,id }: any) => {
+  const { push } = useHistory()
+
   const play = useCallback(async (e) => {
+
     e.stopPropagation()
-    const music = MusicKit.getInstance()
-    await music.setQueue({ url })
-    await music.play()
+
+
+    console.log(isAlbum)
+    if(isAlbum==true){
+
+        if(!isAlbum) return
+        push(`/album/${id}`)
+
+    }else {
+      if(!url) return
+      const music = MusicKit.getInstance()
+      await music.setQueue({ url })
+      await music.play()
+    }
+
   }, [])
 
 
   const artworkUrl = artworkurl.replace('{w}', '560').replace('{h}', '560').replace('{c}', 'cc').replace('{f}', 'webp')
 
   return (
-    <Wrapper onClick={play} className={'FeatureCard'}>
+    <Wrapper onClick={play} className={'FeatureCard'} >
 <ImgWrapper>
   <img src={artworkUrl} />
   <Overlay >
