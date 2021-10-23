@@ -21,6 +21,7 @@ import { ArtistDetail } from './ArtistDetail'
 import { PlayListDetail } from './PlayListDetail'
 import { ListContext, QueueList } from './PlayList/PlayList'
 import { Radio } from './Radio'
+import { BackButton } from './BackButton'
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -80,9 +81,10 @@ const App = () => {
         >
           <LyricsContext.Provider value={{ visible: lyricsVisible, setVisible: setLyricsVisible }}>
             <ListContext.Provider value={{ visible: listVisible, setVisible: setListVisible }}>
-
             <Wrapper>
               <Router>
+                <BackButton/>
+
                 <Sidebar />
                 <MainScroll>
                   <Main>

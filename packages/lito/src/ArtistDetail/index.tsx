@@ -125,7 +125,7 @@ export const ArtistDetail=()=>{
           {views['featured-albums']['data'].map((v:any)=>{
             console.log(2,v)
             const {artistName,artwork,editorialNotes,name}=v.attributes
-          return   <FeatureCard name={name} subtitle={artistName} artworkurl={artwork.url} info={editorialNotes?.short}/>
+          return   <FeatureCard id={v['id']} key={v['id']} isAlbum={true} name={name} subtitle={artistName} artworkurl={artwork.url} info={editorialNotes?.short} />
           })}
         </FeatureGrid>:null
       }
