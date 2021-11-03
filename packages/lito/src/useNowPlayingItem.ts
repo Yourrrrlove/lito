@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+ import { useEffect, useState } from 'react'
 
 const useNowPlayingItem = () => {
   const [value, setValue] = useState<MusicKit.MediaItem | undefined>()
