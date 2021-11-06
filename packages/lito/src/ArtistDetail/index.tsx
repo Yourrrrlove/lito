@@ -108,7 +108,7 @@ export const ArtistDetail=()=>{
     throw new Error(`attributes not found in resource: ${JSON.stringify(Info)}`)
   }
   const { artwork,   name ,genreNames,editorialNotes} = attributes
-  url=attributes['url']
+  // url=attributes['url']
   const artworkUrl = artwork.url.replace('{w}', '400').replace('{h}', '400').replace('{c}', 'cc').replace('{f}', 'webp')
 
   return (
