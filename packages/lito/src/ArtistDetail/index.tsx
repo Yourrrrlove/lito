@@ -87,12 +87,12 @@ export const ArtistDetail=()=>{
   console.log(error)
   console.log(infos)
   let url='';
-  const playA = useCallback(async () => {
+  const playA =  async () => {
     const music = MusicKit.getInstance()
     console.log(url)
     await music.setQueue({ url })
     await music.play()
-  }, [url])
+  }
   const Info=infos?.[0]
   if(!Info){
     return <Nothing placeholder="loading" />
