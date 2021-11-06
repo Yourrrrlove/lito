@@ -87,21 +87,24 @@ export const ArtistDetail=()=>{
   console.log(error)
   console.log(infos)
   let url='';
-  const playA = useCallback(async () => {
+  const playA =async () => {
     const music = MusicKit.getInstance()
     console.log(url)
     await music.setQueue({ url })
     await music.play()
-  }, [url])
+  }
   const Info=infos?.[0]
+  console.log(Info)
+
   if(!Info){
     return <Nothing placeholder="loading" />
   }
   const { attributes,relationships,views } = Info
-  const {tracks}=relationships
   const defaultPlay=relationships['default-playable-content']?.data
+ console.log(defaultPlay)
   if (defaultPlay){
     url=defaultPlay[0]['attributes']['url']
+    console.log(url)
   }
 
   if (!attributes) {
