@@ -45,7 +45,8 @@ export const ArtistResource = ({value}:any) => {
         style={
           {
             '--background-color': `#${artwork.bgColor}`,
-            'borderRadius':'50%'
+            'borderRadius':'50%',
+          'overflow':'hidden'
           } as React.CSSProperties
         }
 onClick={handleClick}

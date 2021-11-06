@@ -70,16 +70,13 @@ position: relative;
 export const ArtistDetail=()=>{
   let id= (useParams() as any)['id']
   console.log(id)
-  const playA = useCallback(async () => {
-    const music = MusicKit.getInstance()
-    await music.setQueue({ url })
-    await music.play()
-  }, [])
+
   const { data: infos, error } = useSWR(
     () => {
       const qs = new URLSearchParams()
       qs.set('l', 'zh-cn')
       qs.set('platform', 'web')
+      qs.set('include','default-playable-content')
       qs.set('views', 'featured-albums,top-songs,full-albums')
       qs.set('limit[artists:top-songs]', '50')
       qs.set('limit[artists:full-albums]', '100')
@@ -89,20 +86,33 @@ export const ArtistDetail=()=>{
   )
   console.log(error)
   console.log(infos)
-
+  let url='';
+  const playA = useCallback(async () => {
+    const music = MusicKit.getInstance()
+    console.log(url)
+    await music.setQueue({ url })
+    await music.play()
+  }, [url])
   const Info=infos?.[0]
   if(!Info){
     return <Nothing placeholder="loading" />
   }
   const { attributes,relationships,views } = Info
-  const {artists,tracks}=relationships
+  const {tracks}=relationships
+  const defaultPlay=relationships['default-playable-content']?.data
+  if (defaultPlay){
+    url=defaultPlay[0]['attributes']['url']
+  }
+
   if (!attributes) {
     throw new Error(`attributes not found in resource: ${JSON.stringify(Info)}`)
   }
-  const { artwork, url,  name ,genreNames,editorialNotes} = attributes
+  const { artwork,   name ,genreNames,editorialNotes} = attributes
+  url=attributes['url']
   const artworkUrl = artwork.url.replace('{w}', '400').replace('{h}', '400').replace('{c}', 'cc').replace('{f}', 'webp')
 
   return (
+    Info?
     <Wrapper>
       <HeadWrapper>
         <ImgWrapper>
@@ -133,6 +143,6 @@ export const ArtistDetail=()=>{
       <AlbumRow value={views['full-albums']}/>
       <SongGrid value={views['top-songs']}/>
 
-    </Wrapper>
+    </Wrapper>:<Nothing/>
   )
 }
