@@ -11,13 +11,19 @@ mod shell;
 mod web_resource_handler;
 mod webview;
 mod webview_install_form;
-
+mod ui;
+mod types;
+mod lyrics_window;
+use bindings::Windows::Win32::System::Com::CoInitialize;
 use bindings::Windows::Win32::UI::WindowsAndMessaging;
 #[cfg(not(debug_assertions))]
 use include_dir::Dir;
 use main_form::MainForm;
 use webview_install_form::WebViewInstallForm;
 use windows::*;
+use crate::lyrics_window::LyricsWindow;
+use crate::ui::Window;
+use std::ptr::null_mut;
 
 #[macro_use]
 extern crate callback_macros;
@@ -42,9 +48,16 @@ static APP_DIR: Dir = include_dir!("..\\packages\\lito\\dist");
 
 fn main() -> Result<()> {
     check_webview_installation()?;
-
+    unsafe {
+        // SetProcessDPIAware();
+        CoInitialize(null_mut())?;
+    }
+    let lyrics_window = &mut LyricsWindow::new()?;
+    lyrics_window.show()?;
+println!("!!!{:?}",lyrics_window.get_hwnd());
     main_form::init()?;
-    let main_form = MainForm::create()?;
+    let mut main_form = MainForm::create()?;
+    main_form.set_lyric(lyrics_window.get_hwnd());
     main_form.show(false);
     form::dispatch_message_loop()?;
 

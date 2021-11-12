@@ -7,6 +7,7 @@ fn main() {
         Windows::Win32::Graphics::Direct2D::*,
         Windows::Win32::Graphics::Dwm::*,
         Windows::Win32::Graphics::Dxgi::*,
+        Windows::Win32::Graphics::DirectWrite::*,
         Windows::Win32::Graphics::Gdi::{MonitorFromWindow, ScreenToClient},
         Windows::Win32::System::{
             Com::{CoInitializeEx, CoTaskMemAlloc, CoTaskMemFree, IBindStatusCallback, URLDownloadToCacheFileW},
@@ -14,13 +15,19 @@ fn main() {
             Threading::GetCurrentThreadId,
             WinRT::EventRegistrationToken,
         },
+                Windows::Win32::System::SystemServices::*,
+
+
         Windows::Win32::UI::{
             Controls::{MARGINS, PBM_SETPOS, PBM_SETRANGE, WM_MOUSELEAVE},
             HiDpi::{GetDpiForMonitor, SetProcessDpiAwareness, PROCESS_DPI_AWARENESS},
             KeyboardAndMouseInput::{GetCapture, ReleaseCapture, SetCapture, SetFocus, TrackMouseEvent},
             Shell::{FOLDERID_LocalAppData, NIS_SHAREDICON, NOTIFYICONDATAW, NOTIFYICON_VERSION_4, NOTIFY_ICON_MESSAGE, SHCreateMemStream, SHGetKnownFolderPath, ShellExecuteW, Shell_NotifyIconW},
             WindowsAndMessaging::*,
+            Animation::*,
         },
+                Windows::Win32::System::Com::*,
+
         Windows::Win32::Graphics::Direct3D11::*,
         Windows::Win32::Graphics::DirectComposition::*,
     };
