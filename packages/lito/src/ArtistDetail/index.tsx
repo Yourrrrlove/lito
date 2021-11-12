@@ -87,7 +87,8 @@ export const ArtistDetail=()=>{
   console.log(error)
   console.log(infos)
   let url='';
-  const playA =async () => {
+  const playA =  async () => {
+
     const music = MusicKit.getInstance()
     console.log(url)
     await music.setQueue({ url })

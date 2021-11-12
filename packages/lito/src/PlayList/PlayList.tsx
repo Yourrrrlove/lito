@@ -197,7 +197,9 @@ export const QueueList=()=>{
       </Header>
 <TrackList>
   {playList.map((v:MusicKit.MediaItem,i:number)=>
-    <TrackItem attributes={v['attributes']} index={i} key={v['id']} active={i==playItem}/>
+
+    <TrackItem attributes={v['attributes']} index={i} key={v['attributes']['name']} active={i==playItem}/>
+
 
   )}
 </TrackList>
