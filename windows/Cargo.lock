@@ -132,6 +132,7 @@ checksum = "a2a5ac8f984bfcf3a823267e5fde638acc3325f6496633a5da6bb6eb2171e103"
 name = "lito-windows"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "bindings",
  "callback_macros",
  "embed-resource",
