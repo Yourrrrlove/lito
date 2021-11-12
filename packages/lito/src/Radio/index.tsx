@@ -141,7 +141,7 @@ const ResultList = ({ attributes,relationships }: any) => {
     // },0)
   }
   const showButtons = () => {
-    if (!relationships) return null;
+    if (!relationships||!relationships.contents||!ResourceListDom.current) return null;
     let clientWidth1 = ResourceListDom.current!['clientWidth']
     // let offsetWidth1= ResourceListDom.current!['offsetWidth']
 // console.log(clientWidth1,offsetWidth1)
@@ -151,6 +151,7 @@ const ResultList = ({ attributes,relationships }: any) => {
     setshowRight((ResourceListScrollDom.current as any).scrollLeft > 20)
   }
   useLayoutEffect(() => {
+    if(!ResourceListScrollDom.current) return
     showButtons();
     (ResourceListScrollDom.current as any).addEventListener('scroll', showButtons)
     // (ResourceListScrollDom.current as any).addEventListener('resize', showButtons)
@@ -159,7 +160,7 @@ const ResultList = ({ attributes,relationships }: any) => {
   }, [])
   useResizeObserver(ResourceListScrollDom,showButtons)
   // console.log(value)
-if (!relationships) return null;
+if (!relationships||!relationships.contents) return null;
 const {name} =attributes;
 const data=relationships.contents.data;
   return (
