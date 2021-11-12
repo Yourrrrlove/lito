@@ -113,7 +113,7 @@ impl MainForm {
                 if visible {
                     WindowsAndMessaging::SW_SHOW
                 } else {
-                    WindowsAndMessaging::SW_HIDE
+                    WindowsAndMessaging::SW_MINIMIZE
                 },
             );
         }
@@ -232,6 +232,7 @@ impl MainForm {
                 let is_minimized = w_param.0 == WindowsAndMessaging::SIZE_MINIMIZED as usize;
                 if is_minimized {
                     self.show(false);
+
                 }
                 self.composition.update(w_param).unwrap();
                 let width = (l_param.0 & 0xffff) as i32;
