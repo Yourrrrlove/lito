@@ -1,4 +1,4 @@
-use std::ffi::CString;
+use std::ffi::{CStr, CString};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use bindings::{
     Microsoft::Web::WebView2::Win32::{
@@ -32,6 +32,9 @@ const CLASS_NAME: &str = "LitoMainForm";
 const WM_USER_WEBVIEW_CREATE: u32 = WindowsAndMessaging::WM_USER;
 const WM_USER_ICONNOTIFY: u32 = WindowsAndMessaging::WM_USER + 1;
 use bindings::Windows::Win32::Foundation::PSTR;
+use crate::shell::TaskBarUpdate;
+use crate::webview::WebView;
+
 pub struct MainForm {
     h_wnd: HWND,
     _notification_icon: NotificationIcon,
@@ -127,7 +130,15 @@ h_instance: unsafe{
 
         })
     }
-
+pub fn taskbar_control(&self,c_type:i32){
+    let controller=self.webview.get_controller().unwrap();
+    unsafe {
+        let sender=controller.get_CoreWebView2().unwrap();
+        let x=format!("{{\"event\":{:?}}}",c_type);
+        println!("{:?}",x.clone());
+        println!("{:?}",sender.PostWebMessageAsJson(x).unwrap());
+    }
+}
     pub fn show(&self, visible: bool) {
         unsafe {
             WindowsAndMessaging::SetWindowLongPtrW(
@@ -216,6 +227,7 @@ h_instance: unsafe{
                             &mut _token,
                         )
                         .unwrap();
+
                     webview2
                         .AddScriptToExecuteOnDocumentCreated(
                             r#"
@@ -253,6 +265,32 @@ h_instance: unsafe{
                     Some(LRESULT(WindowsAndMessaging::HTCLIENT as i32))
                 }
             }
+            WindowsAndMessaging::WM_COMMAND =>{
+                if w_param.0 >> 16 ==6144  {
+                    println!("Clicked {:?}",(w_param.0 >> 16));
+                    println!("Clicked {:?}",(w_param.0  & 0xffff ) as u32);
+                    let BUTTON_ID: u32 =(w_param.0  & 0xffff)  as u32;
+                    match BUTTON_ID {
+                        24849 =>{
+                            self.taskbar_control(0);
+                            TaskBarUpdate(h_wnd,self.h_instance,1)
+                        }
+                        24850 =>{
+                            self.taskbar_control(-1);
+
+                        }
+                        24851 =>{
+                            self.taskbar_control(1);
+
+                        }
+                        _ => {}
+                    }
+                    return Some(LRESULT(0));
+
+                }
+                None
+            }
+
             WindowsAndMessaging::WM_MOVING => {
                 if let Some(controller) = self.webview.get_controller() {
                     controller.NotifyParentWindowPositionChanged().unwrap();
@@ -296,6 +334,7 @@ h_instance: unsafe{
                 }
                 Some(LRESULT(0))
             }
+
             _ => {
                 if msg==taskmes {
 

@@ -7,7 +7,10 @@ import { darkTheme, lightTheme } from './themes'
 import useLyrics, { LyricsLine } from './useLyrics'
 import useNowPlayingItem from './useNowPlayingItem'
 
-export const LyricsContext = React.createContext({ visible: false, setVisible(value: boolean) {} })
+export const LyricsContext = React.createContext({
+  visible: false, setVisible(value: boolean) {
+  }
+})
 
 export const useLyricsContext = () => React.useContext(LyricsContext)
 
@@ -63,14 +66,14 @@ const BlurWrapper = styled.div`
     filter: none;
   }
 `
-export const sendLyrics=(lastline:string,thisline:string)=>{
-  console.log(lastline,thisline)
+export const sendLyrics = (lastline: string, thisline: string) => {
+  console.log(lastline, thisline)
   // @ts-ignore
-  if(!window.chrome||!window.chrome.webview||!window.chrome.webview.postMessage){
+  if (!window.chrome || !window.chrome.webview || !window.chrome.webview.postMessage) {
     return
   }
   // @ts-ignore
-  window.chrome.webview.postMessage({ event: "LyricsUpdate",data:`${lastline}&##&${thisline}` })
+  window.chrome.webview.postMessage({ event: 'LyricsUpdate', data: `${lastline}&##&${thisline}` })
 }
 const Lyrics = () => {
   const { visible } = useLyricsContext()
@@ -84,6 +87,40 @@ const Lyrics = () => {
       setTheme(lightTheme)
     }
   }, [visible, setTheme])
+  useEffect(() => {
+    // @ts-ignore
+    if (!window.chrome || !window.chrome.webview) return
+
+    const Mhandler = async ({ data }: any) => {
+      // console.log(234)
+let instance=MusicKit.getInstance()
+      console.log(data)
+      if (data['event'] == -1) {
+       await instance.skipToPreviousItem();
+      } else if (data['event'] == 0) {
+        // @ts-ignore
+        if(!instance.isPlaying){
+          await instance.play();
+        }else{
+          await instance.pause();
+        }
+      } else if (data['event'] == 1) {
+        await instance.skipToNextItem();
+      } else if (data['event'] == 2) {
+
+      }
+
+
+    }
+    // console.log(234)
+    // @ts-ignore
+    // @ts-ignore
+    window.chrome.webview.addEventListener('message', Mhandler)
+    // @ts-ignore
+    return () => window.chrome.webview.removeEventListener('message', Mhandler)
+
+  }, [window])
+
   const nowPlayingItem = useNowPlayingItem()
   const playerRef = usePlayerRef()
   const { currentTime } = usePlaybackState()
@@ -105,19 +142,23 @@ const Lyrics = () => {
   const [lastScrollAt, setLastScrollAt] = useState(0)
   const blurBehindDelayAfterScroll = 1000
   const [blurBehind, setBlurBehind] = useState(true)
-  useEffect(()=>{
-    if(!playerRef) return;
-    playerRef.addEventListener('ended',()=>{sendLyrics('','')})
-return ()=>{
-  playerRef.removeEventListener('ended',()=>{sendLyrics('','')})
-}
-  },[playerRef])
+  useEffect(() => {
+    if (!playerRef) return
+    playerRef.addEventListener('ended', () => {
+      sendLyrics('', '')
+    })
+    return () => {
+      playerRef.removeEventListener('ended', () => {
+        sendLyrics('', '')
+      })
+    }
+  }, [playerRef])
   useEffect(() => {
     if (activeIndex === undefined) return
     const wrapper = ref.current
     if (!wrapper) return
     const line = wrapper.getElementsByTagName('p')[activeIndex]
-    sendLyrics(lyrics?.lines[activeIndex-1]?.text??"",lyrics?.lines[activeIndex]?.text??"")
+    sendLyrics(lyrics?.lines[activeIndex - 1]?.text ?? '', lyrics?.lines[activeIndex]?.text ?? '')
     if (line) {
       if (Date.now() - lastScrollAt >= blurBehindDelayAfterScroll) {
         line.scrollIntoView({ block: 'center', behavior: 'smooth' })
@@ -131,13 +172,12 @@ return ()=>{
   }, [])
 
 
-
   const handleClick = useCallback(
     (index: number) => {
       if (!playerRef) return
       const line = lyrics?.lines[index]
       if (!line) return
-      sendLyrics(lyrics?.lines[index-1]?.text??"",lyrics?.lines[index]?.text??"")
+      sendLyrics(lyrics?.lines[index - 1]?.text ?? '', lyrics?.lines[index]?.text ?? '')
       playerRef.currentTime = line.begin / 1000
     },
     [lyrics, playerRef]
@@ -149,11 +189,11 @@ return ()=>{
       style={{
         backgroundImage: nowPlayingItem?.artworkURL
           ? `url('${nowPlayingItem.artworkURL
-              .replace('{w}', '256')
-              .replace('{h}', '256')
-              .replace('{c}', 'cc')
-              .replace('{f}', 'webp')}'`
-          : 'none',
+            .replace('{w}', '256')
+            .replace('{h}', '256')
+            .replace('{c}', 'cc')
+            .replace('{f}', 'webp')}'`
+          : 'none'
       }}
     >
       <BlurWrapper className={blurBehind ? 'blur-behind' : ''} onWheel={handleWheel}>

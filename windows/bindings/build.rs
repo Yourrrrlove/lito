@@ -22,7 +22,7 @@ fn main() {
             Controls::{MARGINS, PBM_SETPOS, PBM_SETRANGE, WM_MOUSELEAVE},
             HiDpi::{GetDpiForMonitor, SetProcessDpiAwareness, PROCESS_DPI_AWARENESS},
             KeyboardAndMouseInput::{GetCapture, ReleaseCapture, SetCapture, SetFocus, TrackMouseEvent},
-            Shell::{FOLDERID_LocalAppData, NIS_SHAREDICON, NOTIFYICONDATAW, NOTIFYICON_VERSION_4, NOTIFY_ICON_MESSAGE, SHCreateMemStream, SHGetKnownFolderPath, ShellExecuteW, Shell_NotifyIconW,THUMBBUTTON,ITaskbarList3,TaskbarList,THUMBBUTTONFLAGS},
+            Shell::{FOLDERID_LocalAppData, NIS_SHAREDICON, NOTIFYICONDATAW, NOTIFYICON_VERSION_4, NOTIFY_ICON_MESSAGE, SHCreateMemStream, SHGetKnownFolderPath, ShellExecuteW, Shell_NotifyIconW,THUMBBUTTON,ITaskbarList3,TaskbarList,THUMBBUTTONFLAGS,THBN_CLICKED,},
             WindowsAndMessaging::*,
             Animation::*,
         },
