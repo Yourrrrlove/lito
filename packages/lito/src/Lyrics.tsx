@@ -121,6 +121,7 @@ let instance=MusicKit.getInstance()
 
   }, [window])
 
+
   const nowPlayingItem = useNowPlayingItem()
   const playerRef = usePlayerRef()
   const { currentTime } = usePlaybackState()

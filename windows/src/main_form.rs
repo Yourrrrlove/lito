@@ -273,7 +273,7 @@ pub fn taskbar_control(&self,c_type:i32){
                     match BUTTON_ID {
                         24849 =>{
                             self.taskbar_control(0);
-                            TaskBarUpdate(h_wnd,self.h_instance,1)
+                            // TaskBarUpdate(h_wnd,self.h_instance,1)
                         }
                         24850 =>{
                             self.taskbar_control(-1);
@@ -363,7 +363,7 @@ pub fn taskbar_control(&self,c_type:i32){
         #[serde(tag = "event")]
         enum Message {
             CaptionMouseDown,
-            CaptionDblClick,
+            CaptionDblClick,Play,Stop,
             LyricsUpdate {data:  String}
         }
         match serde_json::from_str::<'_, Message>(message.as_ref()) {
@@ -387,7 +387,13 @@ pub fn taskbar_control(&self,c_type:i32){
                         LPARAM::default(),
                     );
                 }
-                Message::LyricsUpdate{data} =>{
+                Message::Play => {
+                    TaskBarUpdate(self.h_wnd,self.h_instance,1)
+                }
+                Message::Stop => {
+                    TaskBarUpdate(self.h_wnd,self.h_instance,2)
+                }
+                    Message::LyricsUpdate{data} =>{
                     println!("{:?}",data);
 
                     let param: CString =CString::new(data).unwrap();
