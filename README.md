@@ -1,6 +1,6 @@
 <h1 align="center">
   <a href="#readme">
-    <img src="/logo.svg" width="100" height="100" alt="Lito Music" /><br />
+    <img src="/logo.png" width="130" height="130" alt="Lito Music" /><br />
     Lito Music
   </a>
 </h1>
@@ -12,18 +12,18 @@
 </p>
 
 <p align="center">
-  <strong>Lito (/laɪto/) Music</strong> is a lightweight Apple Music client for Windows and macOS,<br />
-  built with MusicKit JS, Edge WebView2 / WKWebView and React.
+  
+  Built with MusicKit JS, Edge WebView2 (Rust Binding) and React, *<strong>Lito</strong>* Focus on Providing Modern Features of Apple Music on Windows Platform.
 </p>
 
-## System requirements
+## 🥥 System requirements
 
 - OS version ≥ Windows 10 / macOS 11.0.
 - For Windows: Edge WebView2 runtime (pre-installed in Windows 10 Insider Preview and Windows 11).  
   If not installed, Lito Music will try to download and install it at the first launch.
 - `Source Han Serif` Font is Prefered for better outlook.You can get it from [here](https://github.com/adobe-fonts/source-han-serif).
 
-## Downloads
+## 🥗 Downloads
 
 > NOTE: Windows Defender might say the pre-compiled binary is a malware. It's just a false positive.
 > Code signing could solve this issue; however, [the price](https://www.google.com/search?q=code+signing+certificates+price)
@@ -31,7 +31,12 @@
 
 Pre-compiled binaries are available [here][releases].
 
-## Features
+Nightly binaries are [here](actions). Desktop Lyrics Feature is Only Enabled on `Lyrics_Desktop` Branch.
+
+
+
+
+## 🍱  Features
 
 ### Listen now
 
@@ -60,8 +65,13 @@ Pre-compiled binaries are available [here][releases].
 
 ![image](https://user-images.githubusercontent.com/44310445/137617076-c65d04f7-5c51-404b-9c6a-3636cdbad013.png)
 
+### Taskbar Thumb Button (Windows Only)
+> This is still an `Alpha Feature`.
 
-## Build
+![image](https://user-images.githubusercontent.com/44310445/141638183-fecf1ed6-d400-408f-8875-a0b4cdce8364.png)
+
+
+## 🍲 Build 
 
 ### For Windows
 
