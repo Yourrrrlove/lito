@@ -166,6 +166,7 @@ export const QueueList=()=>{
 // @ts-ignore
     return ()=>music.removeEventListener('queueItemsDidChange',handlePlayListChange)
   },[music])
+
   useEffect(()=>{
     function handlePlayItemChange(e:any){
       console.log(1)

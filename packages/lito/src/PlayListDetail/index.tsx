@@ -111,11 +111,7 @@ export const PlayListDetail=()=>{
   // const { t } = useTranslation()
   let id= (useParams() as any)['id']
   console.log(id)
-  const playA = useCallback(async () => {
-    const music = MusicKit.getInstance()
-    await music.setQueue({ url })
-    await music.play()
-  }, [])
+
   const { data: infos, error } = useSWR(
     () => {
       const qs = new URLSearchParams()
@@ -133,9 +129,16 @@ export const PlayListDetail=()=>{
   console.log(infos)
 
   const Info=infos?.[0]
+  const playA = useCallback(async () => {
+    if(!Info) return
+    const music = MusicKit.getInstance()
+    await music.setQueue({ url })
+    await music.play()
+  }, [Info])
   if(!Info){
     return <Nothing placeholder="loading" />
   }
+
   const { attributes,relationships } = Info
   const {artists,tracks}=relationships
   if (!attributes) {

@@ -1,6 +1,6 @@
 import i18n from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { initReactI18next } from 'react-i18next'
 import { HashRouter as Router, Route } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
@@ -22,6 +22,7 @@ import { PlayListDetail } from './PlayListDetail'
 import { ListContext, QueueList } from './PlayList/PlayList'
 import { Radio } from './Radio'
 import { BackButton } from './BackButton'
+import { Webview } from './Webview'
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -91,6 +92,8 @@ const App = () => {
                     {authorized ? (
                       <>
                         <Player />
+                        {/*{  // @ts-ignore*/}
+                        {/*  window.chrome&&window.chrome.webview?<Webview/>:null}*/}
                         <QueueList/>
                         <Route path="/" component={ListenNow} exact/>
                         <Route path="/search/:text" component={SearchResult} />

@@ -25,12 +25,42 @@ export const usePlaybackState = () => {
       setCurrentTime(playerRef?.currentTime)
     }
     update()
+    const play = () => {
+
+        // @ts-ignore
+        if (!window.chrome || !window.chrome.webview || !window.chrome.webview.postMessage) {
+          return
+        }
+        // @ts-ignore
+        window.chrome.webview.postMessage({ event: 'Play', })
+
+
+    }
+    const stop = () => {
+
+      // @ts-ignore
+      if (!window.chrome || !window.chrome.webview || !window.chrome.webview.postMessage) {
+        return
+      }
+      // @ts-ignore
+      window.chrome.webview.postMessage({ event: 'Stop', })
+
+
+    }
     if (playerRef) {
       playerRef.addEventListener('durationchange', update)
       playerRef.addEventListener('timeupdate', update)
+      playerRef.addEventListener('playing',  play)
+      playerRef.addEventListener('ended',  stop)
+      playerRef.addEventListener('pause',  stop)
+      playerRef.addEventListener('error',  stop)
       return () => {
         playerRef.removeEventListener('durationchange', update)
         playerRef.removeEventListener('timeupdate', update)
+        playerRef.removeEventListener('playing',  play)
+        playerRef.removeEventListener('ended',  stop)
+        playerRef.removeEventListener('pause',  stop)
+        playerRef.removeEventListener('error',  stop)
       }
     }
   }, [playerRef])

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useHistory, useLocation } from 'react-router'
 const BackWrapper=styled.div`
 position: absolute;
@@ -30,12 +30,14 @@ export const BackButton=()=>{
   const back=()=>{
     window.history.back()
   }
+
   const history=useHistory();
   const { pathname } = useLocation();
   const show=useMemo(()=>{
     return pathname=='/'
   },[pathname])
 if (show) return null;
+
 return <BackWrapper onClick={back}>
   <BackIcon />
 </BackWrapper>
