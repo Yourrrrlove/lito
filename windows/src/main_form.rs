@@ -1,4 +1,5 @@
 use std::ffi::CString;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use bindings::{
     Microsoft::Web::WebView2::Win32::{
         ICoreWebView2, ICoreWebView2WebMessageReceivedEventArgs,
@@ -8,19 +9,20 @@ use bindings::{
         Foundation::{E_POINTER, HWND, LPARAM, LRESULT, PWSTR, RECT, WPARAM},
         Graphics::{DirectComposition, Dwm},
         System::Com,
-        UI::{Controls, KeyboardAndMouseInput, WindowsAndMessaging},
+        UI::{Controls, KeyboardAndMouseInput,Shell, WindowsAndMessaging},
+        System::LibraryLoader::GetModuleHandleW
     },
 };
 use serde::{Deserialize, Serialize};
 use windows::*;
-
+use bindings::Windows::Win32::Foundation::HINSTANCE;
 use crate::{
     callback,
     composition::WebViewFormComposition,
     env::ParsedArgs,
     form::{self, center_window, dip_to_px},
     pwstr,
-    shell::NotificationIcon,
+    shell::NotificationIcon,shell::TaskBar,
     web_resource_handler::WebResourceHandler,
     webview, APP_URL, DEBUG,
 };
@@ -29,17 +31,23 @@ const CLASS_NAME: &str = "LitoMainForm";
 
 const WM_USER_WEBVIEW_CREATE: u32 = WindowsAndMessaging::WM_USER;
 const WM_USER_ICONNOTIFY: u32 = WindowsAndMessaging::WM_USER + 1;
-
+use bindings::Windows::Win32::Foundation::PSTR;
 pub struct MainForm {
     h_wnd: HWND,
     _notification_icon: NotificationIcon,
     composition: WebViewFormComposition,
     webview: webview::WebView,
     lyric_hwnd:Option<HWND>,
+    taskbarmes:u32,
+    taskbar_create:AtomicUsize,
+    h_instance:HINSTANCE
 }
 
 pub fn init() -> Result<()> {
-    unsafe { Com::CoInitializeEx(std::ptr::null_mut(), Com::COINIT_APARTMENTTHREADED)? };
+    unsafe { Com::CoInitializeEx(std::ptr::null_mut(), Com::COINIT_APARTMENTTHREADED)?;
+        // println!("{:?}",);
+
+    };
     form::register_class(CLASS_NAME, Some(wndproc))?;
     Ok(())
 }
@@ -101,12 +109,22 @@ Ok(())
                 LPARAM::default(),
             );
         })?;
+        let taskmes:u32=unsafe{
+            WindowsAndMessaging::RegisterWindowMessageA(PSTR(b"TaskbarButtonCreated\0".as_ptr() as _),)
+        };
         Ok(Self {
             h_wnd,
             _notification_icon: notification_icon,
             webview,
             lyric_hwnd:None,
             composition: webview_composition,
+            taskbarmes:taskmes,
+            taskbar_create:    AtomicUsize::new(0),
+h_instance: unsafe{
+    GetModuleHandleW( PWSTR(0u32 as _))
+}
+
+
         })
     }
 
@@ -129,7 +147,7 @@ Ok(())
     }
 
     unsafe fn wndproc(
-        &'static self,
+        &'static  self,
         h_wnd: HWND,
         msg: u32,
         w_param: WPARAM,
@@ -137,7 +155,9 @@ Ok(())
     ) -> Option<LRESULT> {
         let webview = &self.webview;
         webview.forward_mouse_messages(h_wnd, msg, w_param, l_param);
+        let taskmes=self.taskbarmes;
         match msg {
+
             WM_USER_ICONNOTIFY => {
                 match l_param.0 as u32 {
                     // TODO: Add context menu?
@@ -224,6 +244,7 @@ Ok(())
                 }
                 Some(LRESULT(0))
             }
+
             WindowsAndMessaging::WM_NCHITTEST => {
                 let result = self.composition.nc_hittest(l_param).unwrap();
                 if result != WindowsAndMessaging::HTNOWHERE {
@@ -275,7 +296,18 @@ Ok(())
                 }
                 Some(LRESULT(0))
             }
-            _ => None,
+            _ => {
+                if msg==taskmes {
+
+                    println!("!!!!010");
+
+                    TaskBar(self.h_wnd,self.h_instance);
+                    // self.taskbar_create.fetch_add(1,Ordering::Relaxed);
+                    Some(LRESULT(1))
+                }else {
+                    None
+                }
+            },
         }
     }
 

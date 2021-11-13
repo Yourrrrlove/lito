@@ -2,4 +2,13 @@
 1 RT_MANIFEST "lito.exe.manifest"
 
 #define IDI_APPLICATION 32512
-IDI_APPLICATION ICON "icon.ico"
+#define IDI_ICON1  1012
+#define IDI_ICON2 1022
+#define IDI_ICON3 1032
+IDI_ICON1               ICON                    "pause_icon.ico"
+
+IDI_APPLICATION         ICON                    "icon.ico"
+
+IDI_ICON2               ICON                    "play_icon.ico"
+
+IDI_ICON3               ICON                    "stop_icon.ico"

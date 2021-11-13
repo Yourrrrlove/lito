@@ -1,10 +1,15 @@
+use std::ptr;
+use std::ptr::null_mut;
 use std::sync::atomic::{AtomicBool, Ordering};
-
+use bindings::Windows::Win32::UI::Shell::THUMBBUTTONFLAGS;
 use bindings::Windows::Win32::{
-    Foundation::HWND,
+    Foundation::HWND,Foundation::PWSTR,
     UI::{Shell, WindowsAndMessaging},
 };
-
+use bindings::Windows::Win32::System::Com::{CoCreateInstance,CLSCTX_ALL,CoInitializeEx};
+use bindings::Windows::Win32::Foundation::HINSTANCE;
+use bindings::Windows::Win32::System::Com::CLSCTX_INPROC_SERVER;
+use bindings::Windows::Win32::UI::WindowsAndMessaging::LoadIconW;
 pub struct NotificationIcon {
     h_wnd: HWND,
     callback_message: Option<u32>,
@@ -52,7 +57,10 @@ impl NotificationIcon {
                     }
                     unsafe {
                         Shell::Shell_NotifyIconW(Shell::NIM_ADD, &nid);
+
                     }
+
+
                 } else {
                     let nid = Shell::NOTIFYICONDATAW {
                         cbSize: std::mem::size_of::<Shell::NOTIFYICONDATAW>() as u32,
@@ -68,7 +76,48 @@ impl NotificationIcon {
         }
     }
 }
+pub fn TaskBar(h_wnd: HWND,h_instance:HINSTANCE){
+    let mut nulltip: [u16; 260] = unsafe { std::mem::zeroed() };
 
+    let mut taskbarButton1 =Shell::THUMBBUTTON{
+        iId: 2009162001 as u32,
+        dwMask: Shell::THB_ICON,
+        hIcon: unsafe {LoadIconW(h_instance, PWSTR(1012u32 as _))},
+        iBitmap: 0 as u32,
+        szTip: nulltip,
+        dwFlags: THUMBBUTTONFLAGS::default()
+
+    };
+    let mut taskbarButton2 =Shell::THUMBBUTTON{
+        iId: 2009162001 as u32,
+        dwMask: Shell::THB_ICON,
+        hIcon:  unsafe {LoadIconW(h_instance, PWSTR(1022u32 as _))},
+        iBitmap: 0 as u32,
+        szTip: nulltip,
+        dwFlags: THUMBBUTTONFLAGS::default()
+    };
+    let  buttons=[taskbarButton1,taskbarButton2];
+
+
+    unsafe {
+        let taskbar:Shell::ITaskbarList3= CoCreateInstance(&Shell::TaskbarList,None, CLSCTX_INPROC_SERVER).unwrap();
+        println!("{:?}",taskbar.ThumbBarAddButtons(
+            h_wnd,
+            2u32,
+            buttons.as_ptr()
+
+        ).unwrap());
+        // taskbar.Release()
+
+        // println!("{:?}",taskbar.ThumbBarUpdateButtons(
+        //     h_wnd,
+        //     2u32,
+        //     buttons.as_ptr()
+        //
+        // ).unwrap());
+
+    }
+}
 impl Drop for NotificationIcon {
     fn drop(&mut self) {
         self.show(false);
