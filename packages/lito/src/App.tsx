@@ -23,6 +23,7 @@ import { ListContext, QueueList } from './PlayList/PlayList'
 import { Radio } from './Radio'
 import { BackButton } from './BackButton'
 import { Webview } from './Webview'
+import SimpleErrorBoundary from './SimpleErrorBoundary'
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -95,6 +96,7 @@ const App = () => {
                         {/*{  // @ts-ignore*/}
                         {/*  window.chrome&&window.chrome.webview?<Webview/>:null}*/}
                         <QueueList/>
+                        <SimpleErrorBoundary>
                         <Route path="/" component={ListenNow} exact/>
                         <Route path="/search/:text" component={SearchResult} />
                         <Route path="/album/:id" component={AlbumDetail} />
@@ -103,7 +105,7 @@ const App = () => {
 
                         <Route path="/search" component={SearchResult} exact />
                         <Route path="/radio" component={Radio} exact />
-
+                        </SimpleErrorBoundary>
                       </>
                     ) : (
                       <Authorize />
