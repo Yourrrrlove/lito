@@ -55,13 +55,13 @@ Nightly binaries are [here](https://github.com/lx200916/lito/actions). Desktop L
 
 ![image](https://user-images.githubusercontent.com/44310445/137575591-85736317-d17f-49d9-ad0d-5881239c0226.png)
 ### Radio
-> Not Working with My Account. Test on your risk.
+> Not Working with My Account. Test at your risk.
 
 ![image](https://user-images.githubusercontent.com/44310445/137575534-653ba362-4810-4e23-85dd-59623e4e5e9a.png)
 
 ### Desktop Lyrics （Windows Only)
 > Some Codes From [@lujjjh](https://github.com/lujjjh/iLyrics). 
-> This is still an `Alpha Feature`.
+> This is still an `Alpha Feature`.Desktop Lyrics Feature is Only Enabled on `Lyrics_Desktop` Branch
 
 ![image](https://user-images.githubusercontent.com/44310445/137617076-c65d04f7-5c51-404b-9c6a-3636cdbad013.png)
 
