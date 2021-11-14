@@ -31,7 +31,7 @@
 
 Pre-compiled binaries are available [here][releases].
 
-Nightly binaries are [here](actions). Desktop Lyrics Feature is Only Enabled on `Lyrics_Desktop` Branch.
+Nightly binaries are [here](https://github.com/lx200916/lito/actions). Desktop Lyrics Feature is Only Enabled on `Lyrics_Desktop` Branch.
 
 
 
