@@ -2,8 +2,10 @@ import { useCallback } from 'react'
 import { Overlay, PlayButton, ResourceWrapper, Title } from '../ListenNow/Recommendation'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
+import { addSearchHistory } from '../utils/localstorage'
+
 export const ArtistTitle = styled.span`
-top: 50%;
+  top: 50%;
   transform: translate(0, -50%);
   font-size: 18px;
   position: absolute;
@@ -15,53 +17,56 @@ top: 50%;
   white-space: pre-wrap;
   //z-index: 10;
 `
-export const ArtistResource = ({value}:any) => {
+export const ArtistResource = ({ value }: any) => {
+  const addhistory = addSearchHistory();
 
-    const { attributes,id } = value
+
+  const { attributes, id } = value
   const { push } = useHistory()
   const handleClick = useCallback(() => {
     push(`/artist/${id}`)
-  }, [push,id])
+    addhistory({type:'artists',id:id})
+  }, [push, id])
 
-    // console.log(value)
-    if (!attributes) {
+  // console.log(value)
+  if (!attributes) {
 
-      throw new Error(`attributes not found in resource: ${JSON.stringify(value)}`)
+    throw new Error(`attributes not found in resource: ${JSON.stringify(value)}`)
 
-    }
-    const { artwork, url,  name } = attributes
-    // TODO: some resource's artwork is optional, fallback to render the title?
-    if (!artwork) {
-      return null;
-      // throw new Error(`artwork not found in resource: ${JSON.stringify(value)}`)
-    }
-    if (!url) {
-      throw new Error(`url not found in resource: ${JSON.stringify(value)}`)
-    }
-    const artworkUrl = artwork.url.replace('{w}', '320').replace('{h}', '320').replace('{c}', 'cc').replace('{f}', 'webp')
+  }
+  const { artwork, url, name } = attributes
+  // TODO: some resource's artwork is optional, fallback to render the title?
+  if (!artwork) {
+    return null
+    // throw new Error(`artwork not found in resource: ${JSON.stringify(value)}`)
+  }
+  if (!url) {
+    throw new Error(`url not found in resource: ${JSON.stringify(value)}`)
+  }
+  const artworkUrl = artwork.url.replace('{w}', '320').replace('{h}', '320').replace('{c}', 'cc').replace('{f}', 'webp')
 
-    return (
-      <ResourceWrapper
-        style={
-          {
-            '--background-color': `#${artwork.bgColor}`,
-            'borderRadius':'50%',
-          'overflow':'hidden'
-          } as React.CSSProperties
-        }
-onClick={handleClick}
-      >
-        <img src={artworkUrl} loading='lazy' width='100%' height='100%' alt='' />
-        <Overlay>
+  return (
+    <ResourceWrapper
+      style={
+        {
+          '--background-color': `#${artwork.bgColor}`,
+          'borderRadius': '50%',
+          'overflow': 'hidden'
+        } as React.CSSProperties
+      }
+      onClick={handleClick}
+    >
+      <img src={artworkUrl} loading='lazy' width='100%' height='100%' alt='' />
+      <Overlay>
 
 
-          <ArtistTitle>
-            {name}
-          </ArtistTitle>
+        <ArtistTitle>
+          {name}
+        </ArtistTitle>
 
-        </Overlay>
+      </Overlay>
 
-      </ResourceWrapper>
-    )
+    </ResourceWrapper>
+  )
 
 }

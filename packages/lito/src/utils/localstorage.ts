@@ -1,5 +1,19 @@
 import { useEffect, useState } from 'react'
-
+export function addSearchHistory(){
+  const [history, setHistory] = useLocalStorage<any[]>('player.history', [])
+  const addhistory=(item:any)=>{
+    if (history.length>50) history.pop();
+    let index=history.find(value => {
+      return value['type']==item['type']&&value['id']==item['id']
+    })
+    if (index!=undefined){
+      history.splice(index,1)
+    }
+    history.unshift(item)
+    setHistory(history)
+  }
+  return addhistory
+}
 export function useLocalStorage<T>(key: string, initialValue: T) {
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
