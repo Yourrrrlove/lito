@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import useNowPlayingItem from '../useNowPlayingItem'
 import ProgressControl from './ProgressControl'
+import { usePersistPlaybackStates } from './Storage'
 
 const Wrapper = styled.div`
   position: absolute;
@@ -32,7 +33,7 @@ const Controls = styled.div`
   }
 `
 
-const MediaItem = styled.div`
+const MediaItemWrapper = styled.div`
   flex: 4;
   min-width: 0;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -95,29 +96,35 @@ const VolumeControl = styled.div`
     --app-region: none;
   }
 `
-const Player = () => {
+const MediaItem=()=>{
   const mediaItem = useNowPlayingItem()
+return(
+  <MediaItemWrapper>
+    <Artwork>
+      <apple-music-artwork width="50" />
+    </Artwork>
+    <Meta>
+      {mediaItem && (
+        <>
+          <dt>{mediaItem.title}</dt>
+          <dd>
+            {mediaItem.artistName} - {mediaItem.albumName}
+          </dd>
+          <ProgressControl />
+        </>
+      )}
+    </Meta>
+  </MediaItemWrapper>
+)
+}
+const Player = () => {
+  usePersistPlaybackStates()
   return (
     <Wrapper>
       <Controls>
         <apple-music-playback-controls />
       </Controls>
-      <MediaItem>
-        <Artwork>
-          <apple-music-artwork width="50" />
-        </Artwork>
-        <Meta>
-          {mediaItem && (
-            <>
-              <dt>{mediaItem.title}</dt>
-              <dd>
-                {mediaItem.artistName} - {mediaItem.albumName}
-              </dd>
-              <ProgressControl />
-            </>
-          )}
-        </Meta>
-      </MediaItem>
+<MediaItem/>
       <VolumeControl>
         <apple-music-volume />
       </VolumeControl>

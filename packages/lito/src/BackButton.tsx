@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useHistory, useLocation } from 'react-router'
+import { isMacOS } from './utils'
 const BackWrapper=styled.div`
 position: absolute;
   top:0px;
@@ -36,7 +37,7 @@ export const BackButton=()=>{
   const show=useMemo(()=>{
     return pathname=='/'
   },[pathname])
-if (show) return null;
+if (show ||isMacOS()) return null;
 
 return <BackWrapper onClick={back}>
   <BackIcon />

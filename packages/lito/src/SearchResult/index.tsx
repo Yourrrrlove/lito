@@ -6,6 +6,8 @@ import Recommendation from '../ListenNow/Recommendation'
 import { useLocation, useParams } from 'react-router-dom'
 import ResultList from './results'
 import { SongGrid } from './SongGrid'
+import { useLocalStorage } from '../utils/localstorage'
+import { SearchRecord } from './SearchRecord'
 const Wrapper = styled.div`
   padding-bottom: 32px;
 `
@@ -22,18 +24,52 @@ const SearchFetcher = async (url: string) => {
   console.log(results)
   return results
 }
+const ListWrapper=styled.div`
+  margin-left: 30px;
+  display: flex;
+  //grid-row-gap: 20px;
+  width: 80%;
+`
 const SearchResults = () => {
   const { t } = useTranslation()
   let text= (useParams() as any)['text']
   console.log(text)
   if (text==undefined){
+    const [history, setHistory] = useLocalStorage<any[]>('player.history', [])
+    let records={songs:[],artists:[],albums:[]};
+    history.forEach(value => {
+      // @ts-ignore
+      records[value['type']].push(value['id'])
+
+    })
+    // console.log(records)
+    const { data: ResultLists, error } = useSWR(
+      () => {
+        const qs = new URLSearchParams()
+        records.songs.length>0?qs.set('ids[songs]', records.songs.join(",")):null
+        records.artists.length>0?qs.set('ids[artists]', records.artists.join(",")):null
+        records.albums.length>0?qs.set('ids[albums]', records.albums.join(",")):null
+
+        qs.set('fields', 'artwork,previewArtwork,artistName,url,name,playParams')
+        qs.set('l', 'zh-cn')
+        qs.set('platform','web')
+        return `v1/catalog/cn/?${qs.toString()}`
+      }
+    )
     return (
       <Wrapper>
-        <Header>{t('searchResult')}</Header>
-        {/*{error && <Nothing placeholder="fetchFailed" />}*/}
-        {/*{recommendationList?.map((value: any) => (*/}
-        {/*  <Recommendation key={value.id} value={value} />*/}
-        {/*))}*/}
+        <Header>{t('searchRecord')}</Header>
+        <ListWrapper>
+        {error && <Nothing placeholder="fetchFailed" />}
+        {ResultLists?.map((value: any) =>{
+          const {id,type,attributes}=value;
+          const {url,name,artistName,artwork} = attributes
+         return (
+
+
+            <SearchRecord key={value.id} id={id} artistName={artistName} type={type.substring(0,type.length-1)} url={url} name={name} artworkurl={artwork['url']} />
+          )
+        } )}</ListWrapper>
       </Wrapper>
     )
 
@@ -68,4 +104,5 @@ const SearchResults = () => {
     </Wrapper>
   )
 }
+
 export default SearchResults

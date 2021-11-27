@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { Overlay, PlayButton } from '../ListenNow/Recommendation'
 import styled from 'styled-components'
+import { addSearchHistory } from '../utils/localstorage'
 const ResourceWrapper=styled.li`
 display: flex;
   align-items:center;
@@ -44,7 +45,7 @@ opacity: 0.8;
 `
 export const SongResource = ({value}:any) => {
 
-  const { attributes } = value
+  const { attributes,id } = value
 
 
   // console.log(value)
@@ -59,11 +60,15 @@ export const SongResource = ({value}:any) => {
   if (!url) {
     throw new Error(`url not found in resource: ${JSON.stringify(value)}`)
   }
+  const addhistory=addSearchHistory();
+
+
   const artworkUrl = artwork.url.replace('{w}', '320').replace('{h}', '320').replace('{c}', 'cc').replace('{f}', 'webp')
   const play = useCallback(async () => {
     const music = MusicKit.getInstance()
     await music.setQueue({ url })
     await music.play()
+    addhistory({type:'songs',id:id})
   }, [])
   return (
     <ResourceWrapper onClick={play}

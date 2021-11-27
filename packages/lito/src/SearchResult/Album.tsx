@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { Overlay, PlayButton, ResourceWrapper, SubTitle, Title } from '../ListenNow/Recommendation'
 import { useHistory } from 'react-router'
+import { addSearchHistory } from '../utils/localstorage'
 
 export const AlbumResource = ({value,noHover,noAlbum}:any) => {
 
@@ -26,10 +27,13 @@ export const AlbumResource = ({value,noHover,noAlbum}:any) => {
     await music.setQueue({ url })
     await music.play()
   }, [])
+  const addhistory=addSearchHistory()
+
   const { push } = useHistory()
   const handleClick = useCallback((e) => {
     if(noAlbum) return
     e.stopPropagation()
+    addhistory({type:'albums',id:id})
     push(`/album/${id}`)
   }, [push,id])
   return (

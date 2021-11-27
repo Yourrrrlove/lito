@@ -15,6 +15,8 @@
       "loading": "正在加载",
       "fetchFailed": "加载失败",
       "searchResult": "搜索结果",
+      "searchRecord": "搜索历史",
+
       "albums": "专辑",
       "songs":"歌曲",
       "playlists": "播放列表",
