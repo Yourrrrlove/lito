@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { PlayIcon } from '../AlbumDetail'
 
 export const ListContext = React.createContext({ visible: false, setVisible(value: boolean) {} })
+
 export const useListContext = () => React.useContext(ListContext)
 const Header = styled.div`
   padding: 13px 0;
