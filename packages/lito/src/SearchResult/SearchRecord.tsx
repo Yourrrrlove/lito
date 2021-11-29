@@ -6,13 +6,14 @@ import { useTranslation } from 'react-i18next'
 
 const Wrapper = styled.div`
   display: flex;
-  margin: 0px 10px;
+  margin:   10px;
   padding: 15px;
   align-items: center;
   max-width: 300px;
   min-width: 250px;
   border-radius: 15px;
   background: rgba(229,229,229,0.75);
+  
   //opacity: 0.75;
 
   img {
