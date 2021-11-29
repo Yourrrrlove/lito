@@ -19,11 +19,12 @@ import SearchResult from './SearchResult'
 import { AlbumDetail } from './AlbumDetail'
 import { ArtistDetail } from './ArtistDetail'
 import { PlayListDetail } from './PlayListDetail'
-import { ListContext, QueueList } from './PlayList/PlayList'
+import { ListContext, QueueList,  } from './PlayList/PlayList'
 import { Radio } from './Radio'
 import { BackButton } from './BackButton'
 import { Webview } from './Webview'
 import SimpleErrorBoundary from './SimpleErrorBoundary'
+import { SettingContext, SettingModal } from './Settings'
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -71,6 +72,7 @@ const App = () => {
   const authorized = useAuthorized()
   const [lyricsVisible, setLyricsVisible] = useState(false)
   const [listVisible, setListVisible] = useState(false)
+  const [settingVisible, setSettingVisible] = useState(false)
 
   return (
     <SetThemeContext.Provider value={setTheme}>
@@ -83,10 +85,11 @@ const App = () => {
         >
           <LyricsContext.Provider value={{ visible: lyricsVisible, setVisible: setLyricsVisible }}>
             <ListContext.Provider value={{ visible: listVisible, setVisible: setListVisible }}>
+              <SettingContext.Provider value={{visible: settingVisible, setVisible: setSettingVisible}}>
             <Wrapper>
               <Router>
                 <BackButton/>
-
+<SettingModal/>
                 <Sidebar />
                 <MainScroll>
                   <Main>
@@ -116,7 +119,7 @@ const App = () => {
               <ControlButtons />
               <Lyrics />
             </Wrapper>
-
+              </SettingContext.Provider>
             </ListContext.Provider>
           </LyricsContext.Provider>
 
