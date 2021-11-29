@@ -20,7 +20,7 @@ const Wrapper = styled.div`
   position: fixed;
   padding-top: 50px;
   box-sizing: border-box;
-  
+  overflow: scroll;
   top: 0;
   right: 0;
   bottom: 0;
