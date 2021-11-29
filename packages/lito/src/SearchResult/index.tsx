@@ -27,8 +27,11 @@ const SearchFetcher = async (url: string) => {
 const ListWrapper=styled.div`
   margin-left: 30px;
   display: flex;
+  flex-wrap: wrap;
+  margin-top: -10px;
+
   //grid-row-gap: 20px;
-  width: 80%;
+  width: 95%;
 `
 const SearchResults = () => {
   const { t } = useTranslation()
