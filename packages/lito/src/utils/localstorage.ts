@@ -2,15 +2,19 @@ import { useEffect, useState } from 'react'
 export function addSearchHistory(){
   const [history, setHistory] = useLocalStorage<any[]>('player.history', [])
   const addhistory=(item:any)=>{
-    if (history.length>50) history.pop();
-    let index=history.find(value => {
-      return value['type']==item['type']&&value['id']==item['id']
-    })
-    if (index!=undefined){
-      history.splice(index,1)
+    const fun=(history:any[])=>{
+      if (history.length>50) history.pop();
+      let index=history.find(value => {
+        return value['type']==item['type']&&value['id']==item['id']
+      })
+      if (index!=undefined){
+        history.splice(index,1)
+      }
+      history.unshift(item)
+      return history;
     }
-    history.unshift(item)
-    setHistory(history)
+
+    setHistory(fun)
   }
   return addhistory
 }

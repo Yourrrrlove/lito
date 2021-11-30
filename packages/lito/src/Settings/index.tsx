@@ -36,12 +36,12 @@ display: flex;
 `
 const SettingButton=styled.div`
   border-radius: 6px;
-  margin-right: 10px;
+  margin-right: 10px; 
   font-size: 16px;
   line-height: 20px;
   margin-left: auto;
   font-weight: 500;
-  background-color: #238636;
+  background-color: #5ea9a2;
   padding: 5px 16px;
   color: white;
   border-color: rgba(240,246,252,0.1);
