@@ -3,6 +3,8 @@ import { useEffect } from 'react'
 
 export const usePersistPlaybackStates = () => {
   const [volume, setVolume] = useLocalStorage('player.volume', 1)
+  const [repeat, setRepeat] = useLocalStorage('player.repeat', 1)
+
   usePlayerEventCallback(
     MusicKit.Events.playbackVolumeDidChange,
     () => {
