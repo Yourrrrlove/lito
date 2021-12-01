@@ -99,6 +99,11 @@ pub fn TaskBarUpdate(h_wnd: HWND, h_instance:HINSTANCE, t_type:i32)  {
                     buttons.as_ptr()
 
                 ).unwrap());
+                println!("{:?}",taskbar.SetOverlayIcon(
+                    h_wnd,
+                    LoadIconW(h_instance, PWSTR(106u32 as _)),
+                    PWSTR(0 as _)
+                ).unwrap());
 
             }
 
@@ -121,6 +126,11 @@ pub fn TaskBarUpdate(h_wnd: HWND, h_instance:HINSTANCE, t_type:i32)  {
                     1u32,
                     buttons.as_ptr()
 
+                ).unwrap());
+                println!("{:?}",taskbar.SetOverlayIcon(
+                    h_wnd,
+                    LoadIconW(h_instance, PWSTR(107u32 as _)),
+                    PWSTR(0 as _)
                 ).unwrap());
 
             }
