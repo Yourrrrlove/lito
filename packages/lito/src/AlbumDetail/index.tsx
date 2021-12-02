@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+ import styled from 'styled-components'
 import useSWR from 'swr'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
@@ -100,7 +100,7 @@ const ArtistJump=({artist}:any)=>{
     }, [push,artist])
   return(
     <SubTitle onClick={ToArtist}>
-      {artist.attributes.name}
+      {artist.attributes?.name}
     </SubTitle>
   )
 
