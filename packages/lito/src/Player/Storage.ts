@@ -22,6 +22,12 @@ export const usePersistPlaybackStates = () => {
       const instance = MusicKit.getInstance()
       const url = (instance.nowPlayingItem as any)?.container.attributes?.url
       console.log((instance.nowPlayingItem as any)?.container.attributes?.url)
+      // @ts-ignore
+      if (window&&window.chrome&&window.chrome.webview&&window.chrome.webview.postMessage){
+        // @ts-ignore
+        window.chrome.webview.postMessage({ event: 'SongUpdate', duration: Math.ceil(instance.nowPlayingItem?.playbackDuration/1000) })
+
+      }
       if (url) {
         setURL(url)
       }
