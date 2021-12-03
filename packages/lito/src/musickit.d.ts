@@ -14,6 +14,8 @@ declare namespace MusicKit {
   }
 
   interface MusicKitInstance {
+    shuffleMode: number;
+    repeatMode: number;
     volume: number | ((val: number) => number);
     nowPlayingItem: MediaItem | undefined
     currentPlaybackDuration: number

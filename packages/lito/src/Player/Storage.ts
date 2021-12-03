@@ -3,7 +3,6 @@ import { useEffect } from 'react'
 
 export const usePersistPlaybackStates = () => {
   const [volume, setVolume] = useLocalStorage('player.volume', 1)
-  const [repeat, setRepeat] = useLocalStorage('player.repeat', 1)
 
   usePlayerEventCallback(
     MusicKit.Events.playbackVolumeDidChange,
@@ -15,6 +14,8 @@ export const usePersistPlaybackStates = () => {
 
   const [url, setURL] = useLocalStorage<string>('player.url','')
   const [index, setIndex] = useLocalStorage<number>('player.index', 0)
+  const [repeat, setRepeat] = useLocalStorage<any>('player.repeat', {})
+
   usePlayerEventCallback(
     MusicKit.Events.nowPlayingItemDidChange,
     () => {
@@ -28,11 +29,27 @@ export const usePersistPlaybackStates = () => {
     },
     []
   )
+useEffect(()=>{
+  const unload=()=>{
+    const instance = MusicKit.getInstance()
+    const repeatMode=instance.repeatMode;
+    const shuffleMode=instance.shuffleMode;
+    setRepeat({'repeatMode':repeatMode,'shuffleMode':shuffleMode})
+  }
+  window.addEventListener('beforeunload',unload)
+  return ()=>{
+    window.removeEventListener('beforeunload',unload)
+  }
 
+})
   useEffect(() => {
     const instance = MusicKit.getInstance()
     // @ts-ignore
     instance.volume = volume
+    if (repeat!={}){
+      instance.repeatMode=repeat['repeatMode']
+      instance.shuffleMode=repeat['shuffleMode']
+    }
     if (url) {
       instance.setQueue({ url, startPosition: index })
     }
