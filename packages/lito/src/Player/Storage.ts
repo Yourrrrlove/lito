@@ -12,7 +12,7 @@ export const usePersistPlaybackStates = () => {
     []
   )
 
-  const [url, setURL] = useLocalStorage<string>('player.url','')
+  const [last, setLast] = useLocalStorage<any>('player.last',{})
   const [index, setIndex] = useLocalStorage<number>('player.index', 0)
   const [repeat, setRepeat] = useLocalStorage<any>('player.repeat', {})
 
@@ -29,7 +29,11 @@ export const usePersistPlaybackStates = () => {
 
       }
       if (url) {
-        setURL(url)
+        setLast({'kind':'url','id':url})
+      }else{
+        const params=instance.nowPlayingItem?.attributes?.playParams
+        setLast(params)
+
       }
       setIndex((instance as any).nowPlayingItemIndex || null)
     },
@@ -41,6 +45,7 @@ useEffect(()=>{
     const repeatMode=instance.repeatMode;
     const shuffleMode=instance.shuffleMode;
     setRepeat({'repeatMode':repeatMode,'shuffleMode':shuffleMode})
+
   }
   window.addEventListener('beforeunload',unload)
   return ()=>{
@@ -56,8 +61,11 @@ useEffect(()=>{
       instance.repeatMode=repeat['repeatMode']
       instance.shuffleMode=repeat['shuffleMode']
     }
-    if (url) {
-      instance.setQueue({ url, startPosition: index })
+    if (last) {
+      let param={}
+      // @ts-ignore
+      param[last['kind']]=last['id']
+      instance.setQueue(param)
     }
   }, [])
 }

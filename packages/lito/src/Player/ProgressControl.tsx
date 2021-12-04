@@ -23,6 +23,8 @@ export const usePlaybackState = () => {
     const update = () => {
       setDuration(playerRef?.duration)
       setCurrentTime(playerRef?.currentTime)
+      // @ts-ignore
+
     }
     update()
     const play = () => {
@@ -32,7 +34,7 @@ export const usePlaybackState = () => {
           return
         }
         // @ts-ignore
-        window.chrome.webview.postMessage({ event: 'Play', })
+        window.chrome.webview.postMessage({ event: 'Play', time:Math.ceil(playerRef?.currentTime), duration:Math.ceil(playerRef?.duration)})
 
 
     }
@@ -195,6 +197,13 @@ const ProgressControl = () => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       if (playerRef) {
         playerRef.currentTime = +event.target.value
+        // @ts-ignore
+        // if (window&&window.chrome&&window.chrome.webview&&window.chrome.webview.postMessage){
+        //   console.log(playerRef?.currentTime)
+        //   // @ts-ignore
+        //   window.chrome.webview.postMessage({ event: 'SongTimeChange', time: Math.ceil(playerRef?.currentTime) })
+        //
+        // }
       }
     },
     [playerRef]
