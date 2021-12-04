@@ -1,3 +1,4 @@
+use std::convert::TryInto;
 use std::ptr;
 use std::ptr::null_mut;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -15,13 +16,22 @@ pub struct NotificationIcon {
     callback_message: Option<u32>,
     visible: AtomicBool,
 }
+pub struct TaskBar {
+    h_wnd: HWND,
+    taskbar:Shell::ITaskbarList3,
+    h_instance:HINSTANCE,
+    taskbar_button2:Shell::THUMBBUTTON,
+    taskbar_button3:Shell::THUMBBUTTON,
 
+}
 impl NotificationIcon {
     pub fn new(h_wnd: HWND, callback_message: Option<u32>) -> Self {
+
         Self {
             h_wnd,
             callback_message,
             visible: AtomicBool::new(false),
+
         }
     }
 
@@ -76,129 +86,268 @@ impl NotificationIcon {
         }
     }
 }
-pub fn TaskBarUpdate(h_wnd: HWND, h_instance:HINSTANCE, t_type:i32)  {
-    let mut nulltip: [u16; 260] = unsafe { std::mem::zeroed() };
 
-    match t_type {
-        1 =>{
-            let mut taskbarButton1 =Shell::THUMBBUTTON{
-                iId: 2009162001 as u32,
-                dwMask: Shell::THB_ICON,
-                hIcon: unsafe {LoadIconW(h_instance, PWSTR(101u32 as _))},
-                iBitmap: 0 as u32,//24849
-                szTip: nulltip,
-                dwFlags: THUMBBUTTONFLAGS::default()
+impl TaskBar {
+    pub fn new(h_wnd: HWND,h_instance:HINSTANCE) -> Self {
+        let mut nulltip: [u16; 260] = unsafe { std::mem::zeroed() };
 
-            };
-            let  buttons=[taskbarButton1,];
-            unsafe {
-                let taskbar:Shell::ITaskbarList3= CoCreateInstance(&Shell::TaskbarList,None, CLSCTX_INPROC_SERVER).unwrap();
-                println!("{:?}",taskbar.ThumbBarUpdateButtons(
-                    h_wnd,
-                    1u32,
-                    buttons.as_ptr()
-
-                ).unwrap());
-                println!("{:?}",taskbar.SetOverlayIcon(
-                    h_wnd,
-                    LoadIconW(h_instance, PWSTR(106u32 as _)),
-                    PWSTR(0 as _)
-                ).unwrap());
-
-            }
+        let mut taskbar_button2 =Shell::THUMBBUTTON{
+            iId: 2009162002 as u32, //24850
+            dwMask: Shell::THB_ICON,
+            hIcon:  unsafe {LoadIconW(h_instance, PWSTR(104u32 as _))},
+            iBitmap: 0 as u32,
+            szTip: nulltip,
+            dwFlags: THUMBBUTTONFLAGS::default()
+        };
+        let mut taskbar_button3 =Shell::THUMBBUTTON{
+            iId: 2009162003 as u32,//24851
+            dwMask: Shell::THB_ICON,
+            hIcon:  unsafe {LoadIconW(h_instance, PWSTR(105u32 as _))},
+            iBitmap: 0 as u32,
+            szTip: nulltip,
+            dwFlags: THUMBBUTTONFLAGS::default()
+        };
+        let taskbar: Shell::ITaskbarList3;
+        unsafe {
+            taskbar = CoCreateInstance(&Shell::TaskbarList, None, CLSCTX_INPROC_SERVER).unwrap();
 
         }
-        2 =>{
-            let mut taskbarButton1 =Shell::THUMBBUTTON{
-                iId: 2009162001 as u32,
-                dwMask: Shell::THB_ICON,
-                hIcon: unsafe {LoadIconW(h_instance, PWSTR(102u32 as _))},
-                iBitmap: 0 as u32,//24849
-                szTip: nulltip,
-                dwFlags: THUMBBUTTONFLAGS::default()
 
-            };
-            let  buttons=[taskbarButton1,];
-            unsafe {
-                let taskbar:Shell::ITaskbarList3= CoCreateInstance(&Shell::TaskbarList,None, CLSCTX_INPROC_SERVER).unwrap();
-                println!("{:?}",taskbar.ThumbBarUpdateButtons(
-                    h_wnd,
-                    1u32,
-                    buttons.as_ptr()
+        Self{
+            taskbar,h_wnd,h_instance,taskbar_button2,taskbar_button3
+        }
 
-                ).unwrap());
-                println!("{:?}",taskbar.SetOverlayIcon(
-                    h_wnd,
-                    LoadIconW(h_instance, PWSTR(107u32 as _)),
-                    PWSTR(0 as _)
-                ).unwrap());
+    }
+    pub fn progressbar_update(&self,val:i64, duration:i64){
+        unsafe {
 
-            }
+            println!("??!!{:?}",self.taskbar.SetProgressValue (
+                self.h_wnd,
+                val.try_into().unwrap(),
+                duration.try_into().unwrap()
+
+            ).unwrap());
 
         }
-        _ => {}
-    }
 
-}
-
-pub fn TaskBar(h_wnd: HWND,h_instance:HINSTANCE){
-    let mut nulltip: [u16; 260] = unsafe { std::mem::zeroed() };
-
-    let mut taskbarButton1 =Shell::THUMBBUTTON{
-        iId: 2009162001 as u32,//24849
-        dwMask: Shell::THB_ICON,
-        hIcon: unsafe {LoadIconW(h_instance, PWSTR(102u32 as _))},
-        iBitmap: 0 as u32,//24849
-        szTip: nulltip,
-        dwFlags: THUMBBUTTONFLAGS::default()
-
-    };
-    let mut taskbarButton2 =Shell::THUMBBUTTON{
-        iId: 2009162002 as u32, //24850
-        dwMask: Shell::THB_ICON,
-        hIcon:  unsafe {LoadIconW(h_instance, PWSTR(104u32 as _))},
-        iBitmap: 0 as u32,
-        szTip: nulltip,
-        dwFlags: THUMBBUTTONFLAGS::default()
-    };
-    let mut taskbarButton3 =Shell::THUMBBUTTON{
-        iId: 2009162003 as u32,//24851
-        dwMask: Shell::THB_ICON,
-        hIcon:  unsafe {LoadIconW(h_instance, PWSTR(105u32 as _))},
-        iBitmap: 0 as u32,
-        szTip: nulltip,
-        dwFlags: THUMBBUTTONFLAGS::default()
-    };
-    // let mut taskbarButton4 =Shell::THUMBBUTTON{
-    //     iId: 2009162004 as u32,//24852
-    //     dwMask: Shell::THB_ICON | Shell::THB_FLAGS,
-    //     hIcon:  unsafe {LoadIconW(h_instance, PWSTR(101u32 as _))},
-    //     iBitmap: 0 as u32,
-    //     szTip: nulltip,
-    //     dwFlags:  Shell::THBF_HIDDEN,
-    // };
-    let  buttons=[taskbarButton2,taskbarButton1,taskbarButton3,];
-
-
-    unsafe {
-        let taskbar:Shell::ITaskbarList3= CoCreateInstance(&Shell::TaskbarList,None, CLSCTX_INPROC_SERVER).unwrap();
-        println!("{:?}",taskbar.ThumbBarAddButtons(
-            h_wnd,
-            3u32,
-            buttons.as_ptr()
-
-        ).unwrap());
-        // taskbar.Release()
-
-        // println!("{:?}",taskbar.ThumbBarUpdateButtons(
-        //     h_wnd,
-        //     2u32,
-        //     buttons.as_ptr()
-        //
-        // ).unwrap());
 
     }
-}
+    pub fn update(&self, t_type:i32)  {
+        let mut nulltip: [u16; 260] = unsafe { std::mem::zeroed() };
+
+        match t_type {
+            1 =>{
+                let mut taskbarButton1 =Shell::THUMBBUTTON{
+                    iId: 2009162001 as u32,
+                    dwMask: Shell::THB_ICON,
+                    hIcon: unsafe {LoadIconW(self.h_instance, PWSTR(101u32 as _))},
+                    iBitmap: 0 as u32,//24849
+                    szTip: nulltip,
+                    dwFlags: THUMBBUTTONFLAGS::default()
+
+                };
+                let  buttons=[taskbarButton1,];
+                unsafe {
+                    println!("{:?}",self.taskbar.ThumbBarUpdateButtons(
+                        self.h_wnd,
+                        1u32,
+                        buttons.as_ptr()
+
+                    ).unwrap());
+                    println!("{:?}",self.taskbar.SetOverlayIcon(
+                        self.h_wnd,
+                        LoadIconW(self.h_instance, PWSTR(106u32 as _)),
+                        PWSTR(0 as _)
+                    ).unwrap());
+
+                }
+
+            }
+            2 =>{
+                let mut taskbarButton1 =Shell::THUMBBUTTON{
+                    iId: 2009162001 as u32,
+                    dwMask: Shell::THB_ICON,
+                    hIcon: unsafe {LoadIconW(self.h_instance, PWSTR(102u32 as _))},
+                    iBitmap: 0 as u32,//24849
+                    szTip: nulltip,
+                    dwFlags: THUMBBUTTONFLAGS::default()
+
+                };
+                let  buttons=[taskbarButton1,];
+                unsafe {
+                    println!("{:?}",self.taskbar.ThumbBarUpdateButtons(
+                        self.h_wnd,
+                        1u32,
+                        buttons.as_ptr()
+
+                    ).unwrap());
+                    println!("{:?}",self.taskbar.SetOverlayIcon(
+                        self.h_wnd,
+                        LoadIconW(self.h_instance, PWSTR(107u32 as _)),
+                        PWSTR(0 as _)
+                    ).unwrap());
+
+                }
+
+            }
+            _ => {}
+        }
+
+    }
+    pub fn init_buttons(&self){
+        let mut nulltip: [u16; 260] = unsafe { std::mem::zeroed() };
+
+        let mut taskbarButton1 =Shell::THUMBBUTTON{
+            iId: 2009162001 as u32,//24849
+            dwMask: Shell::THB_ICON,
+            hIcon: unsafe {LoadIconW(self.h_instance, PWSTR(102u32 as _))},
+            iBitmap: 0 as u32,//24849
+            szTip: nulltip,
+            dwFlags: THUMBBUTTONFLAGS::default()
+
+        };
+
+
+
+        let  buttons=[self.taskbar_button2,taskbarButton1,self.taskbar_button3,];
+
+
+        unsafe {
+            println!("{:?}",self.taskbar.ThumbBarAddButtons(
+                self.h_wnd,
+                3u32,
+                buttons.as_ptr()
+
+            ).unwrap());
+
+
+        }
+    }
+    }
+
+// pub fn TaskBarUpdate(h_wnd: HWND, h_instance:HINSTANCE, t_type:i32)  {
+//     let mut nulltip: [u16; 260] = unsafe { std::mem::zeroed() };
+//
+//     match t_type {
+//         1 =>{
+//             let mut taskbarButton1 =Shell::THUMBBUTTON{
+//                 iId: 2009162001 as u32,
+//                 dwMask: Shell::THB_ICON,
+//                 hIcon: unsafe {LoadIconW(h_instance, PWSTR(101u32 as _))},
+//                 iBitmap: 0 as u32,//24849
+//                 szTip: nulltip,
+//                 dwFlags: THUMBBUTTONFLAGS::default()
+//
+//             };
+//             let  buttons=[taskbarButton1,];
+//             unsafe {
+//                 let taskbar:Shell::ITaskbarList3= CoCreateInstance(&Shell::TaskbarList,None, CLSCTX_INPROC_SERVER).unwrap();
+//                 println!("{:?}",taskbar.ThumbBarUpdateButtons(
+//                     h_wnd,
+//                     1u32,
+//                     buttons.as_ptr()
+//
+//                 ).unwrap());
+//                 println!("{:?}",taskbar.SetOverlayIcon(
+//                     h_wnd,
+//                     LoadIconW(h_instance, PWSTR(106u32 as _)),
+//                     PWSTR(0 as _)
+//                 ).unwrap());
+//
+//             }
+//
+//         }
+//         2 =>{
+//             let mut taskbarButton1 =Shell::THUMBBUTTON{
+//                 iId: 2009162001 as u32,
+//                 dwMask: Shell::THB_ICON,
+//                 hIcon: unsafe {LoadIconW(h_instance, PWSTR(102u32 as _))},
+//                 iBitmap: 0 as u32,//24849
+//                 szTip: nulltip,
+//                 dwFlags: THUMBBUTTONFLAGS::default()
+//
+//             };
+//             let  buttons=[taskbarButton1,];
+//             unsafe {
+//                 let taskbar:Shell::ITaskbarList3= CoCreateInstance(&Shell::TaskbarList,None, CLSCTX_INPROC_SERVER).unwrap();
+//                 println!("{:?}",taskbar.ThumbBarUpdateButtons(
+//                     h_wnd,
+//                     1u32,
+//                     buttons.as_ptr()
+//
+//                 ).unwrap());
+//                 println!("{:?}",taskbar.SetOverlayIcon(
+//                     h_wnd,
+//                     LoadIconW(h_instance, PWSTR(107u32 as _)),
+//                     PWSTR(0 as _)
+//                 ).unwrap());
+//
+//             }
+//
+//         }
+//         _ => {}
+//     }
+//
+// }
+//
+// pub fn TaskBar(h_wnd: HWND,h_instance:HINSTANCE){
+//     let mut nulltip: [u16; 260] = unsafe { std::mem::zeroed() };
+//
+//     let mut taskbarButton1 =Shell::THUMBBUTTON{
+//         iId: 2009162001 as u32,//24849
+//         dwMask: Shell::THB_ICON,
+//         hIcon: unsafe {LoadIconW(h_instance, PWSTR(102u32 as _))},
+//         iBitmap: 0 as u32,//24849
+//         szTip: nulltip,
+//         dwFlags: THUMBBUTTONFLAGS::default()
+//
+//     };
+//     let mut taskbarButton2 =Shell::THUMBBUTTON{
+//         iId: 2009162002 as u32, //24850
+//         dwMask: Shell::THB_ICON,
+//         hIcon:  unsafe {LoadIconW(h_instance, PWSTR(104u32 as _))},
+//         iBitmap: 0 as u32,
+//         szTip: nulltip,
+//         dwFlags: THUMBBUTTONFLAGS::default()
+//     };
+//     let mut taskbarButton3 =Shell::THUMBBUTTON{
+//         iId: 2009162003 as u32,//24851
+//         dwMask: Shell::THB_ICON,
+//         hIcon:  unsafe {LoadIconW(h_instance, PWSTR(105u32 as _))},
+//         iBitmap: 0 as u32,
+//         szTip: nulltip,
+//         dwFlags: THUMBBUTTONFLAGS::default()
+//     };
+//     // let mut taskbarButton4 =Shell::THUMBBUTTON{
+//     //     iId: 2009162004 as u32,//24852
+//     //     dwMask: Shell::THB_ICON | Shell::THB_FLAGS,
+//     //     hIcon:  unsafe {LoadIconW(h_instance, PWSTR(101u32 as _))},
+//     //     iBitmap: 0 as u32,
+//     //     szTip: nulltip,
+//     //     dwFlags:  Shell::THBF_HIDDEN,
+//     // };
+//     let  buttons=[taskbarButton2,taskbarButton1,taskbarButton3,];
+//
+//
+//     unsafe {
+//         let taskbar:Shell::ITaskbarList3= CoCreateInstance(&Shell::TaskbarList,None, CLSCTX_INPROC_SERVER).unwrap();
+//         println!("{:?}",taskbar.ThumbBarAddButtons(
+//             h_wnd,
+//             3u32,
+//             buttons.as_ptr()
+//
+//         ).unwrap());
+//         // taskbar.Release()
+//
+//         // println!("{:?}",taskbar.ThumbBarUpdateButtons(
+//         //     h_wnd,
+//         //     2u32,
+//         //     buttons.as_ptr()
+//         //
+//         // ).unwrap());
+//
+//     }
+// }
 impl Drop for NotificationIcon {
     fn drop(&mut self) {
         self.show(false);

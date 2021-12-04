@@ -1,5 +1,5 @@
 use std::ffi::{CStr, CString};
-use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicI64, AtomicI8, AtomicUsize, Ordering};
 use bindings::{
     Microsoft::Web::WebView2::Win32::{
         ICoreWebView2, ICoreWebView2WebMessageReceivedEventArgs,
@@ -32,7 +32,7 @@ const CLASS_NAME: &str = "LitoMainForm";
 const WM_USER_WEBVIEW_CREATE: u32 = WindowsAndMessaging::WM_USER;
 const WM_USER_ICONNOTIFY: u32 = WindowsAndMessaging::WM_USER + 1;
 use bindings::Windows::Win32::Foundation::PSTR;
-use crate::shell::TaskBarUpdate;
+// use crate::shell::TaskBarUpdate;
 use crate::webview::WebView;
 
 pub struct MainForm {
@@ -42,8 +42,11 @@ pub struct MainForm {
     webview: webview::WebView,
     lyric_hwnd:Option<HWND>,
     taskbarmes:u32,
-    taskbar_create:AtomicUsize,
-    h_instance:HINSTANCE
+    music_pause:AtomicBool,
+    music_time:AtomicI64,
+    music_duration:AtomicI64,
+    h_instance:HINSTANCE,
+    taskbar:TaskBar
 }
 
 pub fn init() -> Result<()> {
@@ -96,6 +99,7 @@ Ok(())
                 },
             )?;
         }
+        unsafe { WindowsAndMessaging::SetTimer(h_wnd, 1, 1000, None); }
         let notification_icon = NotificationIcon::new(h_wnd, Some(WM_USER_ICONNOTIFY));
         notification_icon.show(true);
         let webview_composition = WebViewFormComposition::new(h_wnd)?;
@@ -104,6 +108,7 @@ Ok(())
             webview_composition.get_dcomp_device().clone(),
             webview_composition.get_webview_visual().cast()?,
         );
+
         webview.create(move || unsafe {
             WindowsAndMessaging::PostMessageW(
                 h_wnd,
@@ -115,6 +120,10 @@ Ok(())
         let taskmes:u32=unsafe{
             WindowsAndMessaging::RegisterWindowMessageA(PSTR(b"TaskbarButtonCreated\0".as_ptr() as _),)
         };
+        let h_instance=unsafe{
+            GetModuleHandleW( PWSTR(0u32 as _))
+        };
+        let taskbar=TaskBar::new(h_wnd,h_instance);
         Ok(Self {
             h_wnd,
             _notification_icon: notification_icon,
@@ -122,10 +131,11 @@ Ok(())
             lyric_hwnd:None,
             composition: webview_composition,
             taskbarmes:taskmes,
-            taskbar_create:    AtomicUsize::new(0),
-h_instance: unsafe{
-    GetModuleHandleW( PWSTR(0u32 as _))
-}
+            music_pause:    AtomicBool::new(true),
+music_time:AtomicI64::new(0),
+music_duration:AtomicI64::new(0),
+taskbar,
+h_instance
 
 
         })
@@ -256,8 +266,27 @@ pub fn taskbar_control(&self,c_type:i32){
                 }
                 Some(LRESULT(0))
             }
+            WindowsAndMessaging::WM_TIMER=>{
+                match w_param {
+                    WPARAM(1) => {
+                        if self.music_pause.load(Ordering::SeqCst) == false {
+                            self.music_time.fetch_add(1,Ordering::SeqCst);
+                            println!("{}",self.music_time.load(Ordering::SeqCst));
+                            println!("{}",self.music_duration.load(Ordering::SeqCst));
+                            self.taskbar.progressbar_update(self.music_time.load(Ordering::SeqCst),self.music_duration.load(Ordering::SeqCst));
+                            Some(LRESULT(1))
 
-            WindowsAndMessaging::WM_NCHITTEST => {
+                        }else {
+                            None
+                        }
+                    }
+                    _=>{
+                        None
+                    }
+                }
+
+            }
+                WindowsAndMessaging::WM_NCHITTEST => {
                 let result = self.composition.nc_hittest(l_param).unwrap();
                 if result != WindowsAndMessaging::HTNOWHERE {
                     Some(LRESULT(result as i32))
@@ -339,8 +368,9 @@ pub fn taskbar_control(&self,c_type:i32){
                 if msg==taskmes {
 
                     println!("!!!!010");
+                    self.taskbar.init_buttons();
 
-                    TaskBar(self.h_wnd,self.h_instance);
+                    // TaskBar(self.h_wnd,self.h_instance);
                     // self.taskbar_create.fetch_add(1,Ordering::Relaxed);
                     Some(LRESULT(1))
                 }else {
@@ -363,7 +393,7 @@ pub fn taskbar_control(&self,c_type:i32){
         #[serde(tag = "event")]
         enum Message {
             CaptionMouseDown,
-            CaptionDblClick,Play,Stop,
+            CaptionDblClick,Play,Stop,SongUpdate{duration:i64},
             LyricsUpdate {data:  String}
         }
         match serde_json::from_str::<'_, Message>(message.as_ref()) {
@@ -378,6 +408,11 @@ pub fn taskbar_control(&self,c_type:i32){
                         LPARAM::default(),
                     );
                 }
+                Message::SongUpdate{duration} =>{
+                    self.music_duration.store(duration,Ordering::SeqCst)
+
+
+                }
                 Message::CaptionDblClick => {
                     KeyboardAndMouseInput::ReleaseCapture();
                     WindowsAndMessaging::SendMessageW(
@@ -388,10 +423,13 @@ pub fn taskbar_control(&self,c_type:i32){
                     );
                 }
                 Message::Play => {
-                    TaskBarUpdate(self.h_wnd,self.h_instance,1)
+                    self.music_pause.store(false,Ordering::SeqCst);
+                    self.music_time.store(0,Ordering::SeqCst);
+                    self.taskbar.update(1);
                 }
                 Message::Stop => {
-                    TaskBarUpdate(self.h_wnd,self.h_instance,2)
+                    self.music_pause.store(true,Ordering::SeqCst);
+                    self.taskbar.update(2)
                 }
                     Message::LyricsUpdate{data} =>{
                     println!("{:?}",data);
