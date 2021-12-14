@@ -393,7 +393,7 @@ pub fn taskbar_control(&self,c_type:i32){
         #[serde(tag = "event")]
         enum Message {
             CaptionMouseDown,
-            CaptionDblClick,Play{duration:i64,time:i64},Stop,SongUpdate{duration:i64},SongTimeChange{time:i64},
+            CaptionDblClick,Play{ time:i64},Stop,SongUpdate{duration:i64},SongTimeChange{time:i64},
             LyricsUpdate {data:  String}
         }
         match serde_json::from_str::<'_, Message>(message.as_ref()) {
@@ -426,10 +426,10 @@ pub fn taskbar_control(&self,c_type:i32){
                         LPARAM::default(),
                     );
                 }
-                Message::Play{time,duration} => {
+                Message::Play{time} => {
                     self.music_pause.store(false,Ordering::SeqCst);
                     self.music_time.store(time,Ordering::SeqCst);
-                    self.music_duration.store(duration,Ordering::SeqCst);
+                    // self.music_duration.store(duration,Ordering::SeqCst);
 
                     self.taskbar.progressbar_update(self.music_time.load(Ordering::SeqCst),self.music_duration.load(Ordering::SeqCst));
                     self.taskbar.update(1);
