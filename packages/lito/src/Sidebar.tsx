@@ -47,7 +47,7 @@ const Wrapper = styled.div`
 
 const Logo = styled.div`
   background: url(${logo}) center center no-repeat;
-  background-size: 30px 30px;
+  background-size: 48px 48px;
   height: 60px;
   --app-region: drag;
   margin-bottom: 10px;

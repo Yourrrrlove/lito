@@ -34,7 +34,10 @@ export const usePlaybackState = () => {
           return
         }
         // @ts-ignore
-        window.chrome.webview.postMessage({ event: 'Play', time:Math.ceil(playerRef?.currentTime), duration:Math.ceil(playerRef?.duration)})
+      let param={ event: 'Play', time:Math.ceil(playerRef?.currentTime), duration:Math.ceil(playerRef?.duration)}
+        console.log(param)
+        // @ts-ignore
+        window.chrome.webview.postMessage({ event: 'Play', time:Math.ceil(playerRef?.currentTime)})
 
 
     }
