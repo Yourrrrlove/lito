@@ -52,6 +52,8 @@ export const SongGrid = ({ value,name, }: any) => {
   const [showRight, setshowRight] = useState(false)
 
   const ScrollLeft = (flag: Boolean) => {
+    if (ResourceListDom.current==null||ResourceListScrollDom.current==null)
+      return
     const { offsetWidth, clientWidth } = ResourceListScrollDom.current!
     if (flag) {
       (ResourceListScrollDom.current as any).scrollTo({
@@ -68,6 +70,8 @@ export const SongGrid = ({ value,name, }: any) => {
     // },0)
   }
   const showButtons = () => {
+    if (ResourceListDom.current==null||ResourceListScrollDom.current==null)
+      return
     let clientWidth1 = ResourceListDom.current!['clientWidth']
     let offsetWidth1= ResourceListDom.current!['offsetWidth']
 // console.log(clientWidth1,offsetWidth1)
@@ -79,7 +83,7 @@ export const SongGrid = ({ value,name, }: any) => {
   }
   useLayoutEffect(() => {
     showButtons();
-    (ResourceListScrollDom.current as any).addEventListener('scroll', showButtons)
+    (ResourceListScrollDom.current as any)?.addEventListener('scroll', showButtons)
     // (ResourceListScrollDom.current as any).addEventListener('resize', showButtons)
 
 
