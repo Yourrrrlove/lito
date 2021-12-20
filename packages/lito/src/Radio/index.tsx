@@ -125,6 +125,8 @@ const ResultList = ({ attributes,relationships }: any) => {
   const [showRight, setshowRight] = useState(false)
 
   const ScrollLeft = (flag: Boolean) => {
+    if (ResourceListDom.current==null||ResourceListScrollDom.current==null)
+      return
     const { offsetWidth, clientWidth } = ResourceListScrollDom.current!
     if (flag) {
       (ResourceListScrollDom.current as any).scrollTo({
@@ -141,6 +143,8 @@ const ResultList = ({ attributes,relationships }: any) => {
     // },0)
   }
   const showButtons = () => {
+    if (ResourceListDom.current==null||ResourceListScrollDom.current==null)
+      return
     if (!relationships||!relationships.contents||!ResourceListDom.current) return null;
     let clientWidth1 = ResourceListDom.current!['clientWidth']
     // let offsetWidth1= ResourceListDom.current!['offsetWidth']
@@ -153,7 +157,7 @@ const ResultList = ({ attributes,relationships }: any) => {
   useLayoutEffect(() => {
     if(!ResourceListScrollDom.current) return
     showButtons();
-    (ResourceListScrollDom.current as any).addEventListener('scroll', showButtons)
+    (ResourceListScrollDom.current as any)?.addEventListener('scroll', showButtons)
     // (ResourceListScrollDom.current as any).addEventListener('resize', showButtons)
 
 

@@ -142,6 +142,8 @@ const Recommendation = ({ value }: RecommendationProps) => {
   const [showRight, setshowRight] = useState(false)
 
   const ScrollLeft = (flag: Boolean) => {
+    if (ResourceListDom.current==null||ResourceListScrollDom.current==null)
+      return
     const { offsetWidth, clientWidth } = ResourceListScrollDom.current!
     if (flag) {
       (ResourceListScrollDom.current as any).scrollTo({
@@ -158,6 +160,8 @@ const Recommendation = ({ value }: RecommendationProps) => {
     // },0)
   }
   const showButtons = () => {
+    if (ResourceListDom.current==null||ResourceListScrollDom.current==null)
+      return
     let clientWidth1 = ResourceListDom.current!['clientWidth']
 
     const { offsetWidth, clientWidth } = ResourceListScrollDom.current!
@@ -167,7 +171,7 @@ const Recommendation = ({ value }: RecommendationProps) => {
   }
   useLayoutEffect(() => {
     showButtons();
-    (ResourceListScrollDom.current as any).addEventListener('scroll', showButtons)
+    (ResourceListScrollDom.current as any)?.addEventListener('scroll', showButtons)
     // (ResourceListScrollDom.current as any).addEventListener('resize', showButtons)
 
 
@@ -337,9 +341,13 @@ const Resource = ({ value }: ResourceProps) => {
   if (!attributes) {
     throw new Error(`attributes not found in resource: ${JSON.stringify(value)}`)
   }
-  const { artwork, url, curatorName, name } = attributes
+  const {  url, curatorName, name } = attributes
+  let {artwork}=attributes
   // TODO: some resource's artwork is optional, fallback to render the title?
   if (!artwork) {
+    if (attributes['editorialArtwork']){
+      artwork={url:attributes['editorialArtwork']['superHeroTall']['url']}
+    }else
     throw new Error(`artwork not found in resource: ${JSON.stringify(value)}`)
   }
   if (!url) {

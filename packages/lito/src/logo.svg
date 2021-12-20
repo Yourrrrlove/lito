@@ -1,8 +1,25 @@
-<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path
-    fill-rule="evenodd"
-    clip-rule="evenodd"
-    d="M127.27 28.3803C125.455 31.9429 124.647 36.1168 124.288 42H124V60V62V167.497C116.897 162.162 108.068 159 98.5 159C75.0279 159 56 178.028 56 201.5C56 224.972 75.0279 244 98.5 244C121.805 244 140.729 225.242 140.997 202H141V201.5V62H150C163.964 62 170.947 62 176.56 60.0359C186.613 56.518 194.518 48.6134 198.036 38.5598C200 32.9467 200 25.9645 200 12H172C155.198 12 146.798 12 140.38 15.2698C134.735 18.146 130.146 22.7354 127.27 28.3803Z"
-    fill="#F2283F"
+<svg
+        width="256"
+        height="256"
+        fill="none"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <linearGradient
+            xmlns="http://www.w3.org/2000/svg"
+            id="a"
+            gradientUnits="userSpaceOnUse"
+            gradientTransform="matrix(.91716 0 0 .7708 .27 .687)"
+    >
+<!--      <stop offset="0" stop-color="#616eb3" />-->
+      <stop offset="0" stop-color="#ec1067" />
+      <stop offset="1" stop-color="#f6901e" />
+    </linearGradient>
+  </defs>
+  <path
+          d="M20 2.75a.75.75 0 0 0-.965-.718l-10 3a.75.75 0 0 0-.535.718v9.877a3.5 3.5 0 1 0 1.496 2.702.756.756 0 0 0 .004-.079v-7.942l8.5-2.55v5.87a3.5 3.5 0 1 0 1.496 2.702.764.764 0 0 0 .004-.08V2.75Z"
+          fill="url(#a)"
+          stroke="url(#a)"
   />
 </svg>
