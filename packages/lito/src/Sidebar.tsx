@@ -62,7 +62,7 @@ const Logo = styled.div`
   }
 `
 const Logodiv=styled.div`
-  background:   linear-gradient(150deg, rgb(243, 91, 120), rgb(67, 167, 252) 50%) center center no-repeat;
+  background-image: linear-gradient(to right, #ed6ea0 0%, #ec8c69 100%);
   background-color: #f6f6f2;
   //background-attachment: fixed;
   -webkit-clip-path: url(#clipping);
