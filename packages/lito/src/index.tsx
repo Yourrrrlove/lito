@@ -51,7 +51,7 @@ const GlobalStyle = createGlobalStyle`${css`
 
 ;(async () => {
   await MusicKit.configure({
-    developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IldlYlBsYXlLaWQifQ.eyJpc3MiOiJBTVBXZWJQbGF5IiwiaWF0IjoxNjY0MzI2Mjc2LCJleHAiOjE2NzE1ODM4NzYsInJvb3RfaHR0cHNfb3JpZ2luIjpbImFwcGxlLmNvbSJdfQ.8F5MQr_Ixv2tsTwQRt7Kp-FQt25Tu6F4NG-ILbeT6NKBGps7kCRipPqogzaMCs5pwbi5HZtNsC82V8FezpZ_Uw'
+    developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IldlYlBsYXlLaWQifQ.eyJpc3MiOiJBTVBXZWJQbGF5IiwiaWF0IjoxNjYxNDQwNDMyLCJleHAiOjE2NzY5OTI0MzIsInJvb3RfaHR0cHNfb3JpZ2luIjpbImFwcGxlLmNvbSJdfQ.z4BMv9_O4MpMK2iFhYkDqPsx53soPSnlXXK3jm99pHqGOrZADvTgEUw2U7_B1W0MAtFiWBYhYcGvWrzaOig6Bw'
   })
 
   ReactDOM.render(
